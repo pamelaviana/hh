@@ -1,0 +1,7 @@
+<section th:fragment="alerts(alertMessages)" class="section-alert">
+    <div th:each="alert: ${alertMessages}" th:classappend="${alert.type.value}" class="alert alert-dismissible fade show" role="alert">
+        <strong th:text="${alert.highlight}">Highlight</strong>
+        <span th:text="${alert.message}" >Description</span>
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</section>

@@ -32,6 +32,9 @@ public class User extends BaseEntity implements UserDetails {
     protected @Enumerated(EnumType.STRING) UserRole userRole = UserRole.PATIENT;
     protected @Column(nullable=true) byte[] profilePicture;
 
+    @Transient
+    protected String passwordConfirm;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userRole.name()));

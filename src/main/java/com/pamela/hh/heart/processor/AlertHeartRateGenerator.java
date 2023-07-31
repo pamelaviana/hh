@@ -8,7 +8,6 @@ import com.pamela.hh.patient.Patient;
 import com.pamela.hh.user.User;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Builder(builderMethodName = "internalBuilder") @Data
 public class AlertHeartRateGenerator {
@@ -24,7 +23,8 @@ public class AlertHeartRateGenerator {
     }
 
     public void generateAlertIfAny() {
-        if (!healthParamRange.isBpmInRange(heartRate.getBpm())) {
+        if (!healthParamRange.isSpmInRange(heartRate.getSbp())
+                || !healthParamRange.isDpmInRange(heartRate.getDbp())) {
             AlertHeartRate alertHeartRate = AlertHeartRate.builder()
                     .patient(patient)
                     .doctor(doctor)

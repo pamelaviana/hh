@@ -5,13 +5,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @Table(name = "hospital_policies")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder @Data @EqualsAndHashCode(callSuper = true)
-public class PatientPolicy extends BaseEntity {
+public class PatientPolicy extends BaseEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

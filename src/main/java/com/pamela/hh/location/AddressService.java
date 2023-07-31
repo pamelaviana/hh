@@ -20,7 +20,7 @@ public class AddressService {
     	return addressRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<String> add(Address address) {
+    public ResponseEntity<String> save(Address address) {
         addressRepository.save(address);
         return ResponseEntity.ok("Address saved");
     }

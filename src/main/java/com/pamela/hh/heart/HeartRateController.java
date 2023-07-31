@@ -41,7 +41,7 @@ public class HeartRateController {
             return ResponseEntity.badRequest().body("Token is expired");
 
 
-        HeartRate heartRateSaved = heartRateService.add(heartRate);
+        HeartRate heartRateSaved = heartRateService.save(heartRate);
         HeartRateAlertManager heartRateAlertManager = applicationContext.getBean(HeartRateAlertManager.class);
         heartRateAlertManager.processData(heartRateSaved);
 

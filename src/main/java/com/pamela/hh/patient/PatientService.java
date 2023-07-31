@@ -19,7 +19,7 @@ public class PatientService {
     	return patientRepository.findById(id).orElse(null);
     }
 
-    public void add(Patient patient) {
+    public void save(Patient patient) {
         patientRepository.save(patient);
     }
 

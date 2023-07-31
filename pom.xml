@@ -15,7 +15,7 @@
 	<name>hh</name>
 	<description>HH is a web application for healthcare industry</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.runtime.version>17</java.runtime.version>
 		<war.finalName>hh</war.finalName>
 		<war.outputDirectory>${project.build.directory}</war.outputDirectory>
 	</properties>

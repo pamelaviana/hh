@@ -8,7 +8,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static jakarta.servlet.DispatcherType.ERROR;
 import static jakarta.servlet.DispatcherType.FORWARD;
@@ -18,22 +20,37 @@ import static jakarta.servlet.DispatcherType.FORWARD;
 public class SecurityConfig {
 
     private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
     @Autowired
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, CustomLoginSuccessHandler customLoginSuccessHandler) {
         this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.customLoginSuccessHandler = customLoginSuccessHandler;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/logout*"))
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
-                        .requestMatchers("/", "index", "/api/**", "/signup", "/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/", "index", "/api/**", "/register**", "/login", "/logout*",
+                                "/resources/**", "/assets/**", "/settings/**").permitAll()
+                        .requestMatchers("/admin/**")
+                        .fullyAuthenticated()
                         .anyRequest().denyAll()
-                );
+                )
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .successHandler(customLoginSuccessHandler)
+                        .failureUrl("/login?error=true"))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/").permitAll())
+                .exceptionHandling((exception) -> exception
+                        .accessDeniedPage("/login"));
         return http.build();
     }
 

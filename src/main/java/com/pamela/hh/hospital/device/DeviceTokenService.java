@@ -20,7 +20,7 @@ public class DeviceTokenService {
     	return deviceTokenRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<String> add(DeviceToken deviceToken) {
+    public ResponseEntity<String> save(DeviceToken deviceToken) {
         deviceTokenRepository.save(deviceToken);
         return ResponseEntity.ok("Device token added successfully");
     }
@@ -36,5 +36,9 @@ public class DeviceTokenService {
 
     public List<DeviceToken> getAll() {
     	return deviceTokenRepository.findAll();
+    }
+
+    public DeviceToken getFirstActivetedDeviceToken() {
+        return deviceTokenRepository.findFirstByActive();
     }
 }

@@ -1,10 +1,12 @@
 package com.pamela.hh.hospital.policy;
 
+import com.pamela.hh.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientPolicyService {
@@ -20,7 +22,7 @@ public class PatientPolicyService {
         return ResponseEntity.ok("Patient Policy get");
     }
 
-    public ResponseEntity<String> add(PatientPolicy patientPolicy) {
+    public ResponseEntity<String> save(PatientPolicy patientPolicy) {
         patientPolicyRepository.save(patientPolicy);
         return ResponseEntity.ok("Patient Policy added");
     }
@@ -39,4 +41,8 @@ public class PatientPolicyService {
         return patientPolicyRepository.findAll();
     }
 
+    public Optional<PatientPolicy> getPolicyByNameAndEmail(User user) {
+        return patientPolicyRepository.findByFirstNameAndLastNameAndEmail
+                (user.getFirstName(), user.getLastName(), user.getEmail());
+    }
 }

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:insert="~{fragments/header :: head}"></head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <section th:replace="~{fragments/alert :: alerts(alertMessages=${alertMessages})}"></section>
+        <nav th:insert="~{fragments/nav :: nav}"></nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <div th:insert="~{fragments/darktheme :: div}"></div>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
+                                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
+                                    <form class="me-auto navbar-search w-100">
+                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
+                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter" id="notificationCounter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 2, 2019</span>
+                                                <p>Emma Jones needs assistance</p>
+                                            </div>
+                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" th:href="@{/profile}"><span class="d-none d-lg-inline me-2 text-gray-600 small" id="usernameProfile">Emma Jones</span><img class="border rounded-circle img-profile" id="usernameImage" src="assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-1">Register Users</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow mb-3">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold">Register User</p>
+                                </div>
+                                <div class="card-body">
+                                    <form id="registerForm" method="post">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="firstName"><strong>First Name</strong></label><input class="form-control" type="text" id="firstName" placeholder="Emma" name="firstName"></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="lastName"><strong>Last Name</strong></label><input class="form-control" type="text" id="lastName" placeholder="Jones" name="lastName"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="role"><strong>Role</strong></label>
+                                                    <select class="form-select" id="role" name="roleSelector">
+                                                        <optgroup label="Role">
+                                                            <option value="DOCTOR" selected="">Doctor</option>
+                                                            <option value="PATIENT">Patien</option>
+                                                            <option value="ADMIN">Admin</option>
+                                                        </optgroup>
+                                                    </select></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="password"><strong>Password</strong></label><input class="form-control" type="password" id="password" placeholder="12345678" name="password"></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="passwordConfirm"><strong>Repeat Password</strong></label><input class="form-control" type="password" id="passwordConfirm" placeholder="12345678" name="passwordConfirm" readonly=""></div>
+                                            </div>
+                                        </div>
+                                        <input class="form-control" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                        <div class="mb-3">
+                                            <button id="btnRegisterAndUpdate" class="btn btn-primary btn-sm" type="submit">Register User</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card shadow mb-3">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold">Users</p>
+                                </div>
+                                <div class="card-body"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                    <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
+                                        <table class="table my-0" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Policy</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="userTmp: ${users}}">
+                                                    <td th:text="${userTmp.firstName + ' ' + userTmp.lastName}" style="max-width: 120px;">Emma Jones</td>
+                                                    <td th:text="${userTmp.email}" style="max-width: 200px;">emma@email.com</td>
+                                                    <td th:text="${userTmp.userRole}" style="max-width: 80px;">Patient</td>
+                                                    <td style="max-width: 100px;">000008993</td>
+                                                    <td>
+                                                        <button th:attr="data-url=@{register/users/delete/{id}(id=${userTmp.id})}" onclick="deleteRequest(this, 'tr')"
+                                                                class="btn btn-danger btn-sm me-2" type="button" style="min-width: 80px;">Delete</button>
+                                                        <button th:data-id="${userTmp.id}"
+                                                                th:data-firstName="${userTmp.firstName}"
+                                                                th:data-lastName="${userTmp.lastName}"
+                                                                th:data-email="${userTmp.email}"
+                                                                th:data-role="${userTmp.userRole}"
+                                                                th:data-password="${userTmp.password}"
+                                                                onclick="editUser(this)"
+                                                                class="btn btn-primary btn-sm" type="button" style="min-width: 70px;">Edit</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td><strong>Name</strong></td>
+                                                    <td><strong>Email</strong></td>
+                                                    <td><strong>Role</strong></td>
+                                                    <td><strong>Policy</strong></td>
+                                                    <td><strong>Action</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/assets/js/script.min.js}"></script>
+    <script th:src="@{/assets/js/base.js}"></script>
+    <script th:src="@{/assets/js/requests.js}"></script>
+    <script th:src="@{/assets/js/register/events.js}"></script>
+</body>
+</html>

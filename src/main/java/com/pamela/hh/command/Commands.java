@@ -61,7 +61,7 @@ public class Commands {
     }
 
     @Bean
-    CommandLineRunner commandConfigPatient() {
+    CommandLineRunner commandLineRunner() {
         return args -> {
 
             PatientPolicy patientPolicy = PatientPolicy.builder()
@@ -114,19 +114,32 @@ public class Commands {
                     .build();
             deviceTokenRepository.save(deviceToken);
 
-            HealthParamRange healthParamRange = HealthParamRange.builder()
-                    .lowRangeBpm(60)
-                    .highRangeBpm(100)
+            HealthParamRange bpFemaleRange18To39 = HealthParamRange.builder()
+                    .lowRangeSbp(110)
+                    .highRangeSbp(120)
+                    .lowRangeDbp(60)
+                    .highRangeDbp(80)
                     .lowRangeAge(18)
-                    .highRangeAge(65)
+                    .highRangeAge(39)
                     .gender(Gender.FEMALE)
                     .build();
-            healthParamRangeRepository.save(healthParamRange);
+            healthParamRangeRepository.save(bpFemaleRange18To39);
+
+            HealthParamRange bpMaleRange18To39 = HealthParamRange.builder()
+                    .lowRangeSbp(100)
+                    .highRangeSbp(129)
+                    .lowRangeDbp(50)
+                    .highRangeDbp(80)
+                    .lowRangeAge(18)
+                    .highRangeAge(39)
+                    .gender(Gender.MALE)
+                    .build();
+            healthParamRangeRepository.save(bpMaleRange18To39);
 
             Address address = Address.builder()
                     .user(pamela)
                     .address1("10 Main Street")
-                    .address2("Swords")
+                    .address2("Apartment 36")
                     .city("Dublin")
                     .state("Dublin")
                     .zip("D01")
