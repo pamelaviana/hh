@@ -35,4 +35,7 @@ public class AlertHeartRateService {
         return alertHeartRateRepository.findAll();
     }
 
+    public void deleteByPatientId(Long id) {
+        alertHeartRateRepository.deleteByPatientId(id);
+    }
 }

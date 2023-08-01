@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -38,4 +39,18 @@ public class AddressService {
     	return addressRepository.findAll();
     }
 
+    public void deleteByUserId(Long id) {
+        addressRepository.deleteByUserId(id);
+    }
+
+    public Optional<Address> getByUserId(Long id) {
+        return addressRepository.findByUserId(id);
+    }
+
+    public Optional<Address> checkAddressDuplication(Address address) {
+        return addressRepository.existsByAddress(
+                address.getAddress1(),
+                address.getCity(),
+                address.getCountry());
+    }
 }

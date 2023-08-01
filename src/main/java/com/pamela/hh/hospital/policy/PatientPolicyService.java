@@ -22,9 +22,8 @@ public class PatientPolicyService {
         return ResponseEntity.ok("Patient Policy get");
     }
 
-    public ResponseEntity<String> save(PatientPolicy patientPolicy) {
-        patientPolicyRepository.save(patientPolicy);
-        return ResponseEntity.ok("Patient Policy added");
+    public PatientPolicy save(PatientPolicy patientPolicy) {
+        return patientPolicyRepository.save(patientPolicy);
     }
 
     public ResponseEntity<String> update(PatientPolicy patientPolicy) {

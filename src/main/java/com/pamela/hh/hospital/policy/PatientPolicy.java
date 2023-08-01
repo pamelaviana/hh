@@ -22,7 +22,7 @@ public class PatientPolicy extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", columnDefinition = "VARCHAR(40)")
-    private String id;
+    protected String id;
 
     protected @Column(nullable=false, length=45) String firstName;
     protected @Column(nullable=false, length=45) String lastName;

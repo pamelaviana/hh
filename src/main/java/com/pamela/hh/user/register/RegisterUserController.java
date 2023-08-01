@@ -49,7 +49,8 @@ public class RegisterUserController extends BaseController {
                     .orElseThrow(() -> new IllegalStateException("Policy not found or not valid"));
 
             RegistrationValidator.validatePolicy(patientPolicy, policyNumber);
-            ObjectUtil.process(userService.save(user),
+            User preRegisteredUser = userService.getUserByEmail(user.getEmail());
+            ObjectUtil.process(userService.updatePassword(preRegisteredUser, user.getPassword()),
                     (User u) -> listAlertMessage.add(Alert.builder().success().message("User registered successfully").build()),
                     () -> new IllegalStateException("User already exists"));
         } catch (Exception e) {

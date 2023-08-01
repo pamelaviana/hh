@@ -14,8 +14,7 @@ public class HealthParamRangeService {
         this.healthParamRangeRepository = healthParamRangeRepository;
     }
 
-    public ResponseEntity<String> add(HealthParamRange healthParamRange) {
-        healthParamRangeRepository.save(healthParamRange);
-        return ResponseEntity.ok("Health Parameter Range added successfully");
+    public HealthParamRange save(HealthParamRange healthParamRange) {
+        return healthParamRangeRepository.save(healthParamRange);
     }
 }

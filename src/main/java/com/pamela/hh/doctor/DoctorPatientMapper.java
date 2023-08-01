@@ -6,13 +6,17 @@ import com.pamela.hh.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @Table(name = "doctor_patient_mappers")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder @Data @EqualsAndHashCode(callSuper = false)
-public class DoctorPatientMapper extends BaseEntity {
+public class DoctorPatientMapper extends BaseEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

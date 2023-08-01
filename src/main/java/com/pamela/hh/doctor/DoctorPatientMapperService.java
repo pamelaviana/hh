@@ -1,7 +1,5 @@
 package com.pamela.hh.doctor;
 
-import com.pamela.hh.patient.Patient;
-import com.pamela.hh.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class DoctorPatientMapperService {
         return doctorPatientMapperRepository.findByPatientId(patientId);
     }
 
-    public DoctorPatientMapper add(DoctorPatientMapper doctorPatientMapper) {
+    public DoctorPatientMapper save(DoctorPatientMapper doctorPatientMapper) {
         return doctorPatientMapperRepository.save(doctorPatientMapper);
     }
 
@@ -37,4 +35,11 @@ public class DoctorPatientMapperService {
         return doctorPatientMapperRepository.save(doctorPatientMapper);
     }
 
+    public void deleteByPatientId(Long id) {
+        doctorPatientMapperRepository.deleteByPatientId(id);
+    }
+
+    public void deleteByDoctorId(Long id) {
+        doctorPatientMapperRepository.deleteByDoctorId(id);
+    }
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MedicationService {
@@ -20,9 +22,8 @@ public class MedicationService {
         return medicationRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<String> add(Medication medication) {
-        medicationRepository.save(medication);
-        return ResponseEntity.ok("Medication added");
+    public Medication save(Medication medication) {
+        return medicationRepository.save(medication);
     }
 
     public void delete(String id) {
@@ -36,5 +37,17 @@ public class MedicationService {
 
     public List<Medication> getAll() {
         return medicationRepository.findAll();
+    }
+
+    public void deleteByPatientId(Long id) {
+        medicationRepository.deleteByPatientId(id);
+    }
+
+    public void deleteByDoctorId(Long id) {
+        medicationRepository.deleteByDoctorId(id);
+    }
+
+    public Optional<ArrayList<Medication>> getMedicationsByPatientId(Long id) {
+        return medicationRepository.findByPatientId(id);
     }
 }

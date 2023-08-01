@@ -28,9 +28,8 @@ public class Patient extends BaseEntity implements Serializable {
     private User patient;
 
     protected @Column(nullable=false) LocalDate birthday;
-    private @Enumerated(EnumType.STRING) @Column(nullable = false) Gender gender = Gender.OTHER;
-    private @Enumerated(EnumType.STRING) @Column(nullable = false) Smoker smoker = Smoker.NO;
-    private @Column(nullable = false) float height;
-    private @Column(nullable = false) float weight;
-
+    protected @Enumerated(EnumType.STRING) @Column(nullable = false) Gender gender = Gender.OTHER;
+    protected @Enumerated(EnumType.STRING) @Column(nullable = false) Smoker smoker = Smoker.NO;
+    protected @Column float height;
+    protected @Column float weight;
 }

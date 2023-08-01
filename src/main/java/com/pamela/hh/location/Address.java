@@ -10,9 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "addresses", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"zip"})
-})
+@Table(name = "addresses")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder @Data @EqualsAndHashCode(callSuper = true)
@@ -25,16 +23,16 @@ public class Address extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", columnDefinition = "VARCHAR(40)")
-    private String id;
+    protected String id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
+    protected User user;
 
-    private @Column(nullable=false, length=120) String address1;
-    private @Column(nullable=false, length=80) String address2;
-    private @Column(nullable=false, length=90) String city;
-    private @Column(nullable=false, length=60) String state;
-    private @Column(nullable=false, length=15) String zip;
-    private @Column(nullable=false, length=50) String country;
+    protected @Column(nullable=false, length=120) String address1;
+    protected @Column(length=80) String address2;
+    protected @Column(nullable=false, length=90) String city;
+    protected @Column(length=60) String state;
+    protected @Column(nullable=false, length=15) String zip;
+    protected @Column(nullable=false, length=50) String country;
 }

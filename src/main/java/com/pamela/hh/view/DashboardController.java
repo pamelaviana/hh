@@ -21,11 +21,9 @@ public class DashboardController extends BaseController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/dashboard")
-    String getDashboard(
-            Model model,
-            @AuthenticationPrincipal User user) {
-
+    @GetMapping
+    String getDashboard(Model model, @AuthenticationPrincipal User user) {
+        if(user == null) return "redirect:/login";
         model.addAttribute("user", user);
         model.addAttribute("pageName", "dashboard");
         return "index";

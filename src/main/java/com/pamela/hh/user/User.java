@@ -24,7 +24,7 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
-    private @Setter(AccessLevel.PROTECTED) Long id;
+    private Long id;
     protected @Column(nullable=false, length=45) String firstName;
     protected @Column(nullable=false, length=45) String lastName;
     protected @Column(nullable=false) String email;

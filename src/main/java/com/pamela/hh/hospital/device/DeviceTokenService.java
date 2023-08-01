@@ -20,9 +20,8 @@ public class DeviceTokenService {
     	return deviceTokenRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<String> save(DeviceToken deviceToken) {
-        deviceTokenRepository.save(deviceToken);
-        return ResponseEntity.ok("Device token added successfully");
+    public DeviceToken save(DeviceToken deviceToken) {
+        return deviceTokenRepository.save(deviceToken);
     }
 
     public void delete(String id) {

@@ -6,12 +6,18 @@ import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BaseController {
 
     protected void addUIAlertToSession(HttpSession session, List<Alert> alerts) {
+        List<Alert> listAlertMessage = Optional.ofNullable((List <Alert>) session.getAttribute(Alert.ALERT_MESSAGES))
+                .orElse(new ArrayList<>());
+        if (!listAlertMessage.isEmpty() && alerts != null && !alerts.isEmpty()) {
+            alerts.addAll(listAlertMessage);
+        }
         session.setAttribute(Alert.ALERT_MESSAGES, alerts);
     }
 

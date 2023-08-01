@@ -18,7 +18,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         if (roles.contains(UserRole.ADMIN.name())) {
-            response.sendRedirect("/register/users");
+            response.sendRedirect("/register-all");
         } else if(roles.contains(UserRole.DOCTOR.name())) {
             response.sendRedirect("/index");
         } else if(roles.contains(UserRole.PATIENT.name())) {

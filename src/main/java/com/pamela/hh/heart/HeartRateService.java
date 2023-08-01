@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HeartRateService {
@@ -21,5 +22,13 @@ public class HeartRateService {
 
     public List<HeartRate> getHeartRates() {
         return heartRateRepository.findAll();
+    }
+
+    public void deleteByUserId(Long id) {
+        heartRateRepository.deleteByUserId(id);
+    }
+
+    public Optional<List<HeartRate>> getHeartRatesByPatientId(Long id) {
+        return heartRateRepository.findByPatientId(id);
     }
 }

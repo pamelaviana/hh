@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,13 +33,14 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/logout*"))
+                .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
-                        .requestMatchers("/", "index", "/api/**", "/register**", "/login", "/logout*",
-                                "/resources/**", "/assets/**", "/settings/**").permitAll()
-                        .requestMatchers("/admin/**")
+                        .requestMatchers("/api/**", "/register/**", "/login", "/logout*",
+                                "/resources/**", "/assets/**").permitAll()
+                        .requestMatchers("/", "/index", "/profile", "/register-all/**", "/settings/**")
                         .fullyAuthenticated()
-                        .anyRequest().denyAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
@@ -57,6 +57,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(bCryptPasswordEncoder);
         provider.setUserDetailsService(userService);
         return provider;
     }
