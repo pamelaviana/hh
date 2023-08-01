@@ -22,24 +22,24 @@
                                 <div class="card-body">
                                     <form>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="firstName"><strong>First Name</strong></label>
                                                     <input th:value="${userPatient.firstName}" class="form-control" type="text" id="firstName" placeholder="Emma" name="firstName" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="lastName"><strong>Last Name</strong></label>
                                                     <input th:value="${userPatient.lastName}" class="form-control" type="text" id="lastName" placeholder="Jones" name="lastName" readonly="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="policyNumber"><strong>Policy Number</strong></label>
                                                     <input th:value="${patientPolicy.id}" class="form-control" type="text" id="policyNumber" placeholder="10256544156" name="policyNumber" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label>
                                                     <input th:value="${userPatient.email}" class="form-control" type="email" id="email" placeholder="user@example.com" name="email" readonly>
                                                 </div>
@@ -60,12 +60,12 @@
                                                    type="text" id="address" placeholder="O'Connell" name="address" readonly>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label>
                                                     <input th:value="${address.city}" class="form-control" type="text" id="city" placeholder="Dublin" name="city" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label>
                                                     <input th:value="${address.country}" class="form-control" type="text" id="country" placeholder="Ireland" name="country" readonly>
                                                 </div>
@@ -82,31 +82,31 @@
                                 <div class="card-body">
                                     <form method="post" action="/view/patient">
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="firstName"><strong>Name</strong></label>
                                                     <input class="form-control" type="text" id="name" placeholder="Medication Name" name="name">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="lastName"><strong>Description</strong></label>
                                                     <textarea class="form-control" id="description" placeholder="Description" name="description"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="dosage"><strong>Dosage</strong></label>
                                                     <input class="form-control" type="text" id="dosage" placeholder="1mg" name="dosage">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="frequency"><strong>Frequency</strong></label>
                                                     <input class="form-control" type="text" id="frequency" placeholder="Once a day" name="frequency">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="duration"><strong>Duration</strong></label>
                                                     <input class="form-control" type="text" id="duration" placeholder="For a month" name="duration">
                                                 </div>
@@ -115,10 +115,14 @@
                                         </div>
                                         <input class="form-control" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                         <input th:value="${userPatient.id}" id="userId" class="form-control" type="hidden" name="userId">
-                                        <div class="text-end mb-3">
-                                            <button id="btnClear" class="btn btn-success btn-sm link-light me-2" type="reset" style="min-width: 80px;">Clear</button>
-                                            <button data-url="/view/patient" id="btnRegisterAndUpdate" class="btn btn-primary btn-sm"
-                                                    type="submit" style="min-width: 80px;">Add</button>
+                                        <div class="row text-end mb-3">
+                                            <div class="col col-12 col-md-6">
+                                                <button id="btnClear" class="btn btn-success btn-sm link-light me-2" type="reset" style="min-width: 80px;">Clear</button>
+                                            </div>
+                                            <div class="col col-12 col-md-6">
+                                                <button data-url="/view/patient" id="btnRegisterAndUpdate" class="btn btn-primary btn-sm"
+                                                        type="submit" style="min-width: 80px;">Add</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

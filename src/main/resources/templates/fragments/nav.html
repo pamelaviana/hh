@@ -17,6 +17,9 @@
             <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'ADMIN'}">
                 <a class="nav-link" th:href="@{/register-all}"><i class="far fa-id-badge"></i><span>Register Users</span></a>
             </li>
+            <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'ADMIN'}">
+                <a class="nav-link" th:href="@{/settings}"><i class="far fa-sun"></i><span>Settings</span></a>
+            </li>
             <li class="nav-item" sec:authorize="isAnonymous()">
                 <a class="nav-link" th:href="@{/login}"><i class="far fa-user-circle"></i><span>Login</span></a>
             </li>

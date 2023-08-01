@@ -21,36 +21,36 @@
                                 <div class="card-body">
                                     <form>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="firstName"><strong>First Name</strong></label>
                                                     <input th:value="${userPatient.firstName}" class="form-control" type="text" id="firstName" placeholder="Emma" name="firstName" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="lastName"><strong>Last Name</strong></label>
                                                     <input th:value="${userPatient.lastName}" class="form-control" type="text" id="lastName" placeholder="Jones" name="lastName" readonly=""></div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="policyNumber"><strong>Policy Number</strong></label>
                                                     <input th:value="${patientPolicy.id}" class="form-control" type="text" id="policyNumber" placeholder="10256544156" name="policyNumber" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label>
                                                     <input th:value="${userPatient.email}" class="form-control" type="email" id="email" placeholder="user@example.com" name="email" readonly="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="birthday"><strong>Birthday</strong></label>
                                                     <input th:value="${#temporals.format(patient.birthday, 'dd/MM/yyyy')}" class="form-control"
                                                            type="text" id="birthday" placeholder="10256544156" name="birthday" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="smoker"><strong>Smoker</strong></label>
                                                     <input th:value="${patient.smoker}" class="form-control" type="text" id="smoker" placeholder="No" name="smoker" readonly="">
                                                 </div>
@@ -69,12 +69,12 @@
                                             <input th:value="${address.address1}" class="form-control" type="text" id="address" placeholder="O'Connell" name="address" readonly="">
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label>
                                                     <input th:value="${address.city}" class="form-control" type="text" id="city" placeholder="Dublin" name="city" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label>
                                                     <input th:value="${address.country}" class="form-control" type="text" id="country" placeholder="Ireland" name="country" readonly="">
                                                 </div>
@@ -90,24 +90,24 @@
                                 <div class="card-body">
                                     <form>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="age"><strong>Age</strong></label>
                                                     <input th:value="${age}" class="form-control" type="text" id="age" placeholder="60" name="age" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="gender"><strong>Gender</strong></label>
                                                     <input th:value="${patient.gender}" class="form-control" type="text" id="gender" placeholder="Female" name="gender" readonly="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="weight"><strong>Wight</strong></label>
                                                     <input th:value="${patient.weight}" class="form-control" type="text" id="weight" placeholder="70" name="weight" readonly="">
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col col-12 col-md-6">
                                                 <div class="mb-3"><label class="form-label" for="bmi"><strong>BMI</strong></label>
                                                     <input th:value="${bmi}" class="form-control"
                                                            type="text" id="bmi" placeholder="60" name="bmi" readonly="">

@@ -40,11 +40,14 @@ public class HeartRateController {
         if(deviceTokenService.getById(token).isExpired())
             return ResponseEntity.badRequest().body("Token is expired");
 
-
-        HeartRate heartRateSaved = heartRateService.save(heartRate);
-        HeartRateAlertManager heartRateAlertManager = applicationContext.getBean(HeartRateAlertManager.class);
-        heartRateAlertManager.processData(heartRateSaved);
-
+        try {
+            HeartRateValidator.validateHeartRate(heartRate);
+            HeartRate heartRateSaved = heartRateService.save(heartRate);
+            HeartRateAlertManager heartRateAlertManager = applicationContext.getBean(HeartRateAlertManager.class);
+            heartRateAlertManager.processData(heartRateSaved);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok("Heart rate added");
     }
 
