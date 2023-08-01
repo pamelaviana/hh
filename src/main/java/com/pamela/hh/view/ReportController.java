@@ -106,6 +106,7 @@ public class ReportController {
         model.addAttribute("medications", medications);
         model.addAttribute("dailyHeartRates", dailyHeartRates);
         model.addAttribute("avgHeartRates", avgHeartRates);
+        model.addAttribute("pageName", "report");
         return "report";
     }
 

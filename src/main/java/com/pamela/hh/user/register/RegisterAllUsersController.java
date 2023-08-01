@@ -49,7 +49,7 @@ public class RegisterAllUsersController extends BaseController {
         model.addAttribute("user", user);
         model.addAttribute("users", users);
         model.addAttribute("patientPolicyMap", patientPolicyMap);
-        model.addAttribute("pageName", "register users");
+        model.addAttribute("pageName", "Register Users");
         return "register_users";
     }
 

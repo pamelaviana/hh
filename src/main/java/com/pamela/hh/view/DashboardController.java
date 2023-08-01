@@ -9,6 +9,7 @@ import com.pamela.hh.patient.PatientNullObject;
 import com.pamela.hh.patient.PatientService;
 import com.pamela.hh.patient.fitness.BMICalculator;
 import com.pamela.hh.user.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,9 @@ public class DashboardController extends BaseController {
     }
 
     @GetMapping
-    String getDashboard(Model model, @AuthenticationPrincipal User user) {
+    String getDashboard(Model model, HttpSession httpSession, @AuthenticationPrincipal User user) {
 
+        flagAllUIAlertsIfAny(model, httpSession);
         if(user == null) return "redirect:/login";
 
         Patient patient = patientService.getByUserId(user.getId())
@@ -55,7 +57,7 @@ public class DashboardController extends BaseController {
         model.addAttribute("bmi", bmi);
         model.addAttribute("reportUrl", "/report/patient/" + user.getId());
         model.addAttribute("viewUrl", "/view/patient/" + user.getId());
-        model.addAttribute("pageName", "dashboard");
+        model.addAttribute("pageName", "Dashboard");
         return "index";
     }
 

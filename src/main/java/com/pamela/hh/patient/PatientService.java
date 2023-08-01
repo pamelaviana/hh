@@ -6,6 +6,7 @@ import com.pamela.hh.patient.medication.MedicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class PatientService {
         this.alertHeartRateService = alertHeartRateService;
     }
 
-    public Patient getById(Long id) {
-    	return patientRepository.findById(id).orElse(null);
+    public Optional<Patient> getById(Long id) {
+    	return patientRepository.findById(id);
     }
 
     public void save(Patient patient) {
@@ -46,8 +47,8 @@ public class PatientService {
     	patientRepository.save(patient);
     }
 
-    public List<Patient> getAll() {
-    	return patientRepository.findAll();
+    public Optional<List<Patient>> getAll() {
+    	return Optional.ofNullable(patientRepository.findAll());
     }
 
     public void deleteByUserId(Long id) {

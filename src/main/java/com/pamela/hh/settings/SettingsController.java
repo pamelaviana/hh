@@ -27,6 +27,7 @@ public class SettingsController extends BaseController {
         DeviceToken deviceToken = deviceTokenService.getFirstActivetedDeviceToken();
         model.addAttribute("deviceToken", deviceToken);
         model.addAttribute("user", user);
+        model.addAttribute("pageName", "Settings");
         return "settings";
     }
 

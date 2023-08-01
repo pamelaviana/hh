@@ -35,6 +35,7 @@ public class RegisterUserController extends BaseController {
     @GetMapping
     String getRegisterPage(Model model, HttpSession session) {
         flagAllUIAlertsIfAny(model, session);
+        model.addAttribute("pageName", "Register");
         return "register";
     }
 

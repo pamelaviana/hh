@@ -18,7 +18,7 @@ public class AllowedPages extends BaseController {
     String login(Model model, @AuthenticationPrincipal User user) {
         SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("user", user);
-        model.addAttribute("pageName", "login");
+        model.addAttribute("pageName", "Login");
         return "login";
     }
 }

@@ -72,7 +72,7 @@ public class UserProfileController extends BaseController {
         model.addAttribute("user", user);
         model.addAttribute("genders", genders);
         model.addAttribute("smokers", smokers);
-        model.addAttribute("pageName", "profile");
+        model.addAttribute("pageName", "Profile");
         return "profile";
     }
 

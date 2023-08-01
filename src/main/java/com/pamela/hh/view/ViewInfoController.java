@@ -6,6 +6,7 @@ import com.pamela.hh.hospital.policy.PatientPolicy;
 import com.pamela.hh.hospital.policy.PatientPolicyService;
 import com.pamela.hh.location.Address;
 import com.pamela.hh.location.AddressService;
+import com.pamela.hh.patient.Patient;
 import com.pamela.hh.patient.PatientService;
 import com.pamela.hh.patient.medication.Medication;
 import com.pamela.hh.patient.medication.MedicationService;
@@ -49,25 +50,38 @@ public class ViewInfoController extends BaseController {
     }
 
     @GetMapping(value = "/patient/{id}")
-    String getReport(Model model, HttpSession session, @AuthenticationPrincipal User user) {
+    String getReport(Model model, HttpSession session, @PathVariable("id") Long id,
+                     @AuthenticationPrincipal User user) {
+
         flagAllUIAlertsIfAny(model, session);
         if(user == null) return "redirect:/login";
 
-        PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(user)
-                .orElseThrow(() -> new RuntimeException("Patient policy not found"));
+        List<Alert> listAlertMessage = new ArrayList<>();
 
-        Address address = addressService.getByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Address not found"));
+        try {
+            Patient patient = patientService.getByUserId(id)
+                    .orElseThrow(() -> new RuntimeException("Patient not found or your are not a patient"));
 
-        List<Medication> medication = medicationService.getMedicationsByPatientId(user.getId())
-                .orElse(new ArrayList<>());
+            PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(user)
+                    .orElseThrow(() -> new RuntimeException("Patient policy not found"));
 
-        model.addAttribute("user", user);
-        model.addAttribute("userPatient", user);
-        model.addAttribute("patientPolicy", patientPolicy);
-        model.addAttribute("address", address);
-        model.addAttribute("medications", medication);
-        return "view_info";
+            Address address = addressService.getByUserId(user.getId())
+                    .orElseThrow(() -> new RuntimeException("Address not found"));
+            List<Medication> medication = medicationService.getMedicationsByPatientId(user.getId())
+                    .orElse(new ArrayList<>());
+
+            model.addAttribute("user", user);
+            model.addAttribute("userPatient", user);
+            model.addAttribute("patientPolicy", patientPolicy);
+            model.addAttribute("address", address);
+            model.addAttribute("medications", medication);
+            model.addAttribute("pageName", "View Info");
+            return "view_info";
+        } catch (Exception e) {
+            listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
+            addUIAlertToSession(session, listAlertMessage);
+            return "redirect:/index";
+        }
     }
 
     @PostMapping(value = "/patient")

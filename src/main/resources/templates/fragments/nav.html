@@ -12,7 +12,7 @@
                 <a class="nav-link" th:href="@{/profile}"><i class="fas fa-user"></i><span>Profile</span></a>
             </li>
             <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'DOCTOR'}">
-                <a class="nav-link" th:href="@{/patients}"><i class="fas fa-table"></i><span>Patients</span></a>
+                <a class="nav-link" th:href="@{/all-patients}"><i class="fas fa-table"></i><span>Patients</span></a>
             </li>
             <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'ADMIN'}">
                 <a class="nav-link" th:href="@{/register-all}"><i class="far fa-id-badge"></i><span>Register Users</span></a>
