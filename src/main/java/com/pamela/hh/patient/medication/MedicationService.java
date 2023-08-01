@@ -18,8 +18,8 @@ public class MedicationService {
         this.medicationRepository = medicationRepository;
     }
 
-    public Medication getById(String id) {
-        return medicationRepository.findById(id).orElse(null);
+    public Optional<Medication> getById(String id) {
+        return medicationRepository.findById(id);
     }
 
     public Medication save(Medication medication) {
