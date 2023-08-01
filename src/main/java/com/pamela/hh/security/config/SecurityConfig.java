@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/logout*"))
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
+//                        .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers("/api/**", "/register/**", "/login", "/logout*",
                                 "/resources/**", "/assets/**").permitAll()
                         .requestMatchers("/", "/index", "/profile", "/register-all/**", "/settings/**",
