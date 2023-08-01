@@ -28,11 +28,11 @@ public class HeartRate extends BaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    protected User user;
 
-    private @NonNull Integer sbp;
-    private @NonNull Integer dbp;
-    private @NonNull LocalDateTime timestamp;
+    protected @NonNull Integer sbp;
+    protected @NonNull Integer dbp;
+    protected @NonNull LocalDateTime timestamp;
 
     public Long getUserId() {
         return user.getId();

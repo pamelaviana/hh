@@ -3,6 +3,8 @@ package com.pamela.hh.view;
 import com.pamela.hh.doctor.DoctorPatientMapperService;
 import com.pamela.hh.heart.HeartRate;
 import com.pamela.hh.heart.HeartRateService;
+import com.pamela.hh.heart.stats.HeartRateAvg;
+import com.pamela.hh.heart.stats.HeartRateStat;
 import com.pamela.hh.hospital.policy.PatientPolicy;
 import com.pamela.hh.hospital.policy.PatientPolicyNullObject;
 import com.pamela.hh.hospital.policy.PatientPolicyService;
@@ -12,9 +14,11 @@ import com.pamela.hh.location.AddressService;
 import com.pamela.hh.patient.Patient;
 import com.pamela.hh.patient.PatientNullObject;
 import com.pamela.hh.patient.PatientService;
+import com.pamela.hh.patient.fitness.BMICalculator;
 import com.pamela.hh.patient.medication.Medication;
 import com.pamela.hh.patient.medication.MedicationService;
 import com.pamela.hh.user.User;
+import com.pamela.hh.user.UserRole;
 import com.pamela.hh.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -65,6 +70,11 @@ public class ReportController {
     String getPatientReport(Model model, HttpSession session, @AuthenticationPrincipal User userSession,
                             @PathVariable("id") Long id) {
 
+        if(userSession == null) return "redirect:/login";
+        if(userSession.getUserRole().equals(UserRole.PATIENT) && !userSession.getId().equals(id)){
+            return "redirect:/index";
+        }
+
         User userPatient = userService.getByUserId(id);
         PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(userPatient)
                         .orElse(new PatientPolicyNullObject());
@@ -76,6 +86,15 @@ public class ReportController {
                         .orElse(new ArrayList<>());
 
         Integer age = getPatientAge(patient);
+        String bmi = String.format("%.2f", BMICalculator.calculateBMI(patient));
+
+        List<HeartRate> dailyHeartRates = HeartRateStat.builder()
+                        .year(LocalDate.now().getYear()).build()
+                        .getFilteredByDay(heartRates, LocalDate.now().getDayOfMonth());
+
+        Map<String, HeartRateAvg> avgHeartRates = HeartRateStat.builder()
+                        .year(LocalDate.now().getYear()).build()
+                        .getAverageGroupedByMonth(heartRates);
 
         model.addAttribute("user", userSession);
         model.addAttribute("userPatient", userPatient);
@@ -83,8 +102,11 @@ public class ReportController {
         model.addAttribute("patient", patient);
         model.addAttribute("address", address);
         model.addAttribute("age", age);
+        model.addAttribute("bmi", bmi);
         model.addAttribute("medications", medications);
-        return "report/patient";
+        model.addAttribute("dailyHeartRates", dailyHeartRates);
+        model.addAttribute("avgHeartRates", avgHeartRates);
+        return "report";
     }
 
     private int getPatientAge(Patient patient) {

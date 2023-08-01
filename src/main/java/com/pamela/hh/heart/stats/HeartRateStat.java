@@ -1,91 +1,135 @@
 package com.pamela.hh.heart.stats;
 
 import com.pamela.hh.heart.HeartRate;
-import com.pamela.hh.heart.stats.group.Groupable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.Month;
 import java.util.*;
 
+@Builder @Data
+@NoArgsConstructor @AllArgsConstructor
 public class HeartRateStat {
 
-    private final Map<Integer, Node<Node, Node>> description;
-    private Map<Integer, List<HeartRate>> grouped;
-    private final List<HeartRate> heartRates;
+    @Builder.Default private int year = -1;
 
-    public HeartRateStat (List<HeartRate> heartRates) {
-        description = new HashMap<>();
-        grouped = new HashMap<>();
-        this.heartRates = heartRates;
-    }
-
-    public HeartRateStat sort(Comparator<HeartRate> comparable) {
-        Collections.sort(heartRates, comparable);
-        return this;
-    }
-
-    public HeartRateStat sortGrouped() {
-        Map<Integer, List<HeartRate>> sortedMap = new TreeMap<>(grouped);
-        grouped = sortedMap;
-        return this;
-    }
-
-    public HeartRateStat groupBy(Groupable groupable) {
-        Map<Integer, List<HeartRate>> grouped = groupable.group(heartRates);
-        this.grouped.putAll(grouped);
-        return this;
-    }
-
-    public Map<Integer, Node<Node, Node>> describe(){
-
-        grouped.forEach((key, value) -> {
-            int[] sbp = value.stream().mapToInt(HeartRate::getSbp).toArray();
-            int[] dbp = value.stream().mapToInt(HeartRate::getDbp).toArray();
-
-            Node<Integer, Node<Integer, Integer>> nodeSbp = getAvgMinMax(sbp);
-            Node<Integer, Node<Integer, Integer>> nodeDbp = getAvgMinMax(dbp);
-
-            description.put(key, new Node<>(nodeSbp, nodeDbp));
+    public Map<String, HeartRateAvg> getAverageGroupedByDay(List<HeartRate> heartRates){
+        heartRates = filterByYear(heartRates);
+        Map<Integer, List<HeartRate>> tempMap = new TreeMap<>();
+        heartRates.forEach(heartRate -> {
+            int day = heartRate.getTimestamp().getDayOfMonth();
+            tempMap.computeIfAbsent(day, k -> new ArrayList<>());
+            tempMap.get(day).add(heartRate);
         });
-        return getImmutableDescription();
-    }
 
-    private Node<Integer, Node<Integer, Integer>> getAvgMinMax(int[] array) {
-
-        int min = getMin(array);
-        int max = getMax(array);
-        int avg = getAverage(array);
-
-        return new Node<>(avg, getNodeMinMax(min, max));
-    }
-
-    private Node<Integer, Integer> getNodeMinMax(int min, int max) {
-        return new Node<>(min, max);
-    }
-
-    private int getMin(int[] array) {
-        return Arrays.stream(array).min().orElse(0);
-    }
-
-    private int getMax(int[] array) {
-        return Arrays.stream(array).max().orElse(0);
-    }
-
-    private int getAverage(int[] array) {
-        return (int) Arrays.stream(array).average().orElse(0);
-    }
-
-    public List<HeartRate> getImmutableHeartRates() {
-        return Collections.unmodifiableList(heartRates);
-    }
-
-    public Map<Integer, List<HeartRate>> getImmutableGrouped() {
+        Map<String, HeartRateAvg> grouped = new LinkedHashMap<>();
+        tempMap.forEach((key, value) -> {
+            HeartRateAvg heartRateAvg = getHeartRateAvg(value);
+            String day = String.valueOf(key);
+            grouped.put(day, heartRateAvg);
+        });
         return grouped;
     }
 
-    public Map<Integer, Node<Node, Node>> getImmutableDescription() {
-        return description;
+    public Map<String, HeartRateAvg> getAverageGroupedByMonth(List<HeartRate> heartRates){
+        heartRates = filterByYear(heartRates);
+        Map<Integer, List<HeartRate>> tempMap = new TreeMap<>();
+        heartRates.forEach(heartRate -> {
+            int month = heartRate.getTimestamp().getMonth().getValue();
+            tempMap.computeIfAbsent(month, k -> new ArrayList<>());
+            tempMap.get(month).add(heartRate);
+        });
+
+        Map<String, HeartRateAvg> grouped = new LinkedHashMap<>();
+        tempMap.forEach((key, value) -> {
+            HeartRateAvg heartRateAvg = getHeartRateAvg(value);
+            String month = Month.of(key).name();
+            grouped.put(month.toLowerCase(), heartRateAvg);
+        });
+        return grouped;
     }
 
-    public void end() {
-        System.out.println("end");
+    private List<HeartRate> filterByYear(List<HeartRate> heartRates) {
+        if (year == -1) {
+            return heartRates;
+        }
+        List<HeartRate> filtered = new ArrayList<>();
+        heartRates.forEach(heartRate -> {
+            if (heartRate.getTimestamp().getYear() == year) {
+                filtered.add(heartRate);
+            }
+        });
+        return filtered;
     }
+
+    public Map<String, HeartRateAvg> getAverageGroupedByYear(List<HeartRate> heartRates){
+        Map<Integer, List<HeartRate>> tempMap = new TreeMap<>();
+        heartRates.forEach(heartRate -> {
+            int year = heartRate.getTimestamp().getYear();
+            tempMap.computeIfAbsent(year, k -> new ArrayList<>());
+            tempMap.get(year).add(heartRate);
+        });
+
+        Map<String, HeartRateAvg> grouped = new LinkedHashMap<>();
+        tempMap.forEach((key, value) -> {
+            HeartRateAvg heartRateAvg = getHeartRateAvg(value);
+            String year = String.valueOf(key);
+            grouped.put(year, heartRateAvg);
+        });
+        return grouped;
+    }
+
+    public List<HeartRate> getFilteredByDay(List<HeartRate> heartRates, int day){
+        heartRates = filterByYear(heartRates);
+        return filterByDay(heartRates, day);
+    }
+
+    private List<HeartRate> filterByDay(List<HeartRate> heartRates, int day) {
+        if (day == -1) {
+            return heartRates;
+        }
+        List<HeartRate> filtered = new ArrayList<>();
+        heartRates.forEach(heartRate -> {
+            if (heartRate.getTimestamp().getDayOfMonth() == day) {
+                filtered.add(heartRate);
+            }
+        });
+        return filtered;
+    }
+
+    private HeartRateAvg getHeartRateAvg(List<HeartRate> heartRates) {
+        int[] sbp = heartRates.stream().mapToInt(HeartRate::getSbp).toArray();
+        int avgSbp = getAverage(sbp);
+        int minSbp = getMin(sbp);
+        int maxSbp = getMax(sbp);
+
+        int[] dbp = heartRates.stream().mapToInt(HeartRate::getDbp).toArray();
+        int avgDbp = getAverage(dbp);
+        int minDbp = getMin(dbp);
+        int maxDbp = getMax(dbp);
+
+        return HeartRateAvg.builder()
+                .sbpAvg(avgSbp)
+                .sbpMin(minSbp)
+                .sbpMax(maxSbp)
+                .dbpAvg(avgDbp)
+                .dbpMin(minDbp)
+                .dbpMax(maxDbp)
+                .build();
+    }
+
+    public int getMin(int[] array) {
+        return Arrays.stream(array).min().orElse(0);
+    }
+
+    public int getMax(int[] array) {
+        return Arrays.stream(array).max().orElse(0);
+    }
+
+    public int getAverage(int[] array) {
+        return (int) Arrays.stream(array).average().orElse(0);
+    }
+
 }

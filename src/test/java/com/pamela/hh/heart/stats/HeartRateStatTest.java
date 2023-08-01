@@ -1,11 +1,9 @@
 package com.pamela.hh.heart.stats;
 
 import com.pamela.hh.heart.HeartRate;
-import com.pamela.hh.heart.stats.group.MonthlyGroup;
+import com.pamela.hh.util.HeartRateGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,47 +11,59 @@ public class HeartRateStatTest {
 
     @Test
     public void testGroupMonth() {
+        List<HeartRate> heartRates = HeartRateGenerator.builder()
+                .yearMin(2020).yearMax(2024)
+                .monthMin(10).monthMax(13)
+                .build().generateRand(20);
 
-        List<HeartRate> heartRates = getHeartRates(30);
-        HeartRateStat heartRateStat = new HeartRateStat(heartRates);
-        heartRateStat.sort(new HeartRateComparator.Timestamp())
-                .groupBy(new MonthlyGroup()).sortGrouped().end();
+        Map<String, HeartRateAvg> grouped = HeartRateStat.builder().year(2023)
+                .build().getAverageGroupedByMonth(heartRates);
 
-        Map<Integer, List<HeartRate>> grouped = heartRateStat.getImmutableGrouped();
-
-        for(Map.Entry<Integer, List<HeartRate>> entry : grouped.entrySet()) {
-            System.out.print(entry.getKey() + "\t");
-            for(HeartRate heartRate : entry.getValue()) {
-                System.out.print(heartRate.getTimestamp() + "\t");
-            }
-            System.out.println();
+        for(Map.Entry<String, HeartRateAvg> entry : grouped.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
     }
 
-    private List<HeartRate> getHeartRates(int size) {
-        List<HeartRate> heartRates = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            heartRates.add(HeartRate.builder()
-                    .sbp(getRand(110, 200))
-                    .dbp(getRand(60, 100))
-                    .timestamp(getRandDate(2020, 2021))
-                    .build());
+    @Test
+    public void testGroupDay() {
+        List<HeartRate> heartRates = HeartRateGenerator.builder()
+                .yearMin(2020).yearMax(2024)
+                .build().generateRand(20);
+
+        Map<String, HeartRateAvg> grouped = HeartRateStat.builder().year(2023)
+                .build().getAverageGroupedByDay(heartRates);
+
+        for(Map.Entry<String, HeartRateAvg> entry : grouped.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
-        return heartRates;
     }
 
-    private int getRand(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+    @Test
+    public void testGroupYear() {
+        List<HeartRate> heartRates = HeartRateGenerator.builder()
+                .yearMin(2020).yearMax(2024)
+                .build().generateRand(20);
+
+        Map<String, HeartRateAvg> grouped = HeartRateStat.builder().year(2023)
+                .build().getAverageGroupedByYear(heartRates);
+
+        for(Map.Entry<String, HeartRateAvg> entry : grouped.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 
-    private LocalDateTime getRandDate(int minYear, int maxYear) {
-        int year = getRand(minYear, maxYear);
-        int month = getRand(1, 12);
-        int day = getRand(1, 28);
-        int hour = getRand(0, 23);
-        int minute = getRand(0, 59);
-        int second = getRand(0, 59);
-        return LocalDateTime.of(year, month, day, hour, minute, second);
-    }
+    @Test
+    public void testFilterByDay() {
+        List<HeartRate> heartRates = HeartRateGenerator.builder()
+                .yearMin(2020).yearMax(2024)
+                .dayMin(1).dayMax(5)
+                .build().generateRand(20);
 
+        List<HeartRate> filtered = HeartRateStat.builder().year(2023)
+                .build().getFilteredByDay(heartRates, 2);
+
+        for(HeartRate heartRate : filtered) {
+            System.out.println(heartRate);
+        }
+    }
 }

@@ -2,6 +2,8 @@ package com.pamela.hh.command;
 
 import com.pamela.hh.doctor.DoctorPatientMapper;
 import com.pamela.hh.doctor.DoctorPatientMapperService;
+import com.pamela.hh.heart.HeartRate;
+import com.pamela.hh.heart.HeartRateService;
 import com.pamela.hh.heart.healthparameters.HealthParamRange;
 import com.pamela.hh.heart.healthparameters.HealthParamRangeService;
 import com.pamela.hh.hospital.device.DeviceToken;
@@ -16,6 +18,7 @@ import com.pamela.hh.patient.medication.MedicationService;
 import com.pamela.hh.user.User;
 import com.pamela.hh.user.UserRole;
 import com.pamela.hh.user.UserService;
+import com.pamela.hh.util.HeartRateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +38,7 @@ public class Commands {
     private final AddressService addressService;
     private final PatientPolicyService patientPolicyService;
     private final MedicationService medicationService;
+    private final HeartRateService heartRateService;
 
     @Autowired
     public Commands(UserService userService,
@@ -44,7 +48,7 @@ public class Commands {
                     HealthParamRangeService healthParamRangeService,
                     AddressService addressService,
                     PatientPolicyService patientPolicyService,
-                    MedicationService medicationService) {
+                    MedicationService medicationService, HeartRateService heartRateService) {
         this.userService = userService;
         this.patientService = patientService;
         this.doctorPatientMapperService = doctorPatientMapperService;
@@ -53,6 +57,7 @@ public class Commands {
         this.addressService = addressService;
         this.patientPolicyService = patientPolicyService;
         this.medicationService = medicationService;
+        this.heartRateService = heartRateService;
     }
 
     @Bean
@@ -166,6 +171,19 @@ public class Commands {
                     .duration("1 month")
                     .build();
             medicationService.save(medication);
+
+            int currentYear = LocalDate.now().getYear();
+            int currentDay = LocalDate.now().getDayOfMonth();
+            List<HeartRate> heartRates = HeartRateGenerator.builder()
+                    .yearMin(currentYear).yearMax(currentYear + 1)
+                    .dayMin(currentDay).dayMax(currentDay + 2)
+                    .build().generateRand(25);
+
+            heartRates.forEach(heartRate -> {
+                heartRate.setUser(pamela);
+                heartRateService.save(heartRate);
+            });
+
         };
     }
 }

@@ -23,4 +23,7 @@ public interface HeartRateRepository extends JpaRepository<HeartRate, Long> {
 
     @Query("SELECT h FROM HeartRate h WHERE h.user.id = ?1")
     Optional<List<HeartRate>> findByPatientId(Long id);
+
+    @Query("SELECT h FROM HeartRate h WHERE h.user.id = ?1 ORDER BY h.timestamp DESC")
+    Optional<List<HeartRate>> findTopByPatientIdOrderByDateDesc(Long id);
 }

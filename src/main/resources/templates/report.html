@@ -9,44 +9,7 @@
         <nav th:insert="~{fragments/nav :: nav}"></nav>
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
-                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
-                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <div th:insert="~{fragments/darktheme :: div}"></div>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                                    <form class="me-auto navbar-search w-100">
-                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter" id="notificationCounter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Emma Jones needs assistance</p>
-                                            </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <div class="d-none d-sm-block topbar-divider"></div>
-                            <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" th:href="@{/profile}"><span class="d-none d-lg-inline me-2 text-gray-600 small" id="usernameProfile">Emma Jones</span><img class="border rounded-circle img-profile" id="usernameImage" src="assets/img/avatars/avatar1.jpeg"></a>
-                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Profile</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                <nav th:insert="~{fragments/navbar :: nav}"></nav>
                 <div class="container-fluid">
                     <h3 class="text-dark mb-1">Report</h3>
                     <div class="row">
@@ -59,26 +22,38 @@
                                     <form>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="first_name"><strong>First Name</strong></label><input class="form-control" type="text" id="first_name" placeholder="Emma" name="firstName" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="firstName"><strong>First Name</strong></label>
+                                                    <input th:value="${userPatient.firstName}" class="form-control" type="text" id="firstName" placeholder="Emma" name="firstName" readonly="">
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" id="last_name" placeholder="Jones" name="lastName" readonly=""></div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="username"><strong>Policy Number</strong></label><input class="form-control" type="text" id="policynumber" placeholder="10256544156" name="policynumber" readonly=""></div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="lastName"><strong>Last Name</strong></label>
+                                                    <input th:value="${userPatient.lastName}" class="form-control" type="text" id="lastName" placeholder="Jones" name="lastName" readonly=""></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="username"><strong>Birthday</strong></label><input class="form-control" type="text" id="birthday" placeholder="10256544156" name="birthday" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="policyNumber"><strong>Policy Number</strong></label>
+                                                    <input th:value="${patientPolicy.id}" class="form-control" type="text" id="policyNumber" placeholder="10256544156" name="policyNumber" readonly="">
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="username"><strong>Smoker</strong></label><input class="form-control" type="text" id="smoker" placeholder="No" name="smoker" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label>
+                                                    <input th:value="${userPatient.email}" class="form-control" type="email" id="email" placeholder="user@example.com" name="email" readonly="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="birthday"><strong>Birthday</strong></label>
+                                                    <input th:value="${#temporals.format(patient.birthday, 'dd/MM/yyyy')}" class="form-control"
+                                                           type="text" id="birthday" placeholder="10256544156" name="birthday" readonly="">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3"><label class="form-label" for="smoker"><strong>Smoker</strong></label>
+                                                    <input th:value="${patient.smoker}" class="form-control" type="text" id="smoker" placeholder="No" name="smoker" readonly="">
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -90,13 +65,19 @@
                                 </div>
                                 <div class="card-body">
                                     <form>
-                                        <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label><input class="form-control" type="text" id="address" placeholder="O'Connell" name="address" readonly=""></div>
+                                        <div class="mb-3"><label class="form-label" for="address"><strong>Address</strong></label>
+                                            <input th:value="${address.address1}" class="form-control" type="text" id="address" placeholder="O'Connell" name="address" readonly="">
+                                        </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label><input class="form-control" type="text" id="city" placeholder="Dublin" name="city" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="city"><strong>City</strong></label>
+                                                    <input th:value="${address.city}" class="form-control" type="text" id="city" placeholder="Dublin" name="city" readonly="">
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label><input class="form-control" type="text" id="country" placeholder="Ireland" name="country" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="country"><strong>Country</strong></label>
+                                                    <input th:value="${address.country}" class="form-control" type="text" id="country" placeholder="Ireland" name="country" readonly="">
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -110,18 +91,27 @@
                                     <form>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="city"><strong>Age</strong></label><input class="form-control" type="text" id="age" placeholder="60" name="age" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="age"><strong>Age</strong></label>
+                                                    <input th:value="${age}" class="form-control" type="text" id="age" placeholder="60" name="age" readonly="">
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="country"><strong>Gender</strong></label><input class="form-control" type="text" id="gender" placeholder="Female" name="gender" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="gender"><strong>Gender</strong></label>
+                                                    <input th:value="${patient.gender}" class="form-control" type="text" id="gender" placeholder="Female" name="gender" readonly="">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="city"><strong>Wight</strong></label><input class="form-control" type="text" id="weight" placeholder="70" name="weight" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="weight"><strong>Wight</strong></label>
+                                                    <input th:value="${patient.weight}" class="form-control" type="text" id="weight" placeholder="70" name="weight" readonly="">
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="country"><strong>BMI</strong></label><input class="form-control" type="text" id="bmi" placeholder="60" name="bmi" readonly=""></div>
+                                                <div class="mb-3"><label class="form-label" for="bmi"><strong>BMI</strong></label>
+                                                    <input th:value="${bmi}" class="form-control"
+                                                           type="text" id="bmi" placeholder="60" name="bmi" readonly="">
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -132,8 +122,8 @@
                                     <p class="text-primary m-0 fw-bold">Heart Rate Monthly</p>
                                 </div>
                                 <div class="card-body"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                    <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
-                                        <table class="table my-0" id="dataTable">
+                                    <div class="table-responsive table mt-2" id="dataTableMonthly-1" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
+                                        <table class="table my-0" style="max-height: 700px" id="dataTableMonthly">
                                             <thead>
                                                 <tr>
                                                     <th>Month</th>
@@ -143,17 +133,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>January</td>
-                                                    <td>90</td>
-                                                    <td>89</td>
-                                                    <td>91</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>February</td>
-                                                    <td>92</td>
-                                                    <td>90</td>
-                                                    <td>92</td>
+                                                <tr th:each="avgHeartRate: ${avgHeartRates}">
+                                                    <td th:text="${#strings.capitalize(avgHeartRate.key)}">January</td>
+                                                    <td th:text="${avgHeartRate.value.sbpAvg + ' / ' + avgHeartRate.value.dbpAvg}">90</td>
+                                                    <td th:text="${avgHeartRate.value.sbpMin + ' / ' + avgHeartRate.value.dbpMin}">89</td>
+                                                    <td th:text="${avgHeartRate.value.sbpMax + ' / ' + avgHeartRate.value.dbpMax}">91</td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -173,8 +157,8 @@
                                     <p class="text-primary m-0 fw-bold">Heart Rate Daily</p>
                                 </div>
                                 <div class="card-body"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                    <div class="table-responsive table mt-2" id="dataTable-3" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
-                                        <table class="table my-0" id="dataTable">
+                                    <div class="table-responsive table mt-2" id="dataTableDaily-2" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
+                                        <table class="table my-0" style="max-height: 700px" id="dataTableDaily">
                                             <thead>
                                                 <tr>
                                                     <th>Date</th>
@@ -183,15 +167,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>10/05/2023</td>
-                                                    <td>10:00</td>
-                                                    <td>90</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>08/07/2023</td>
-                                                    <td>16:30</td>
-                                                    <td>92</td>
+                                                <tr th:each="dailyHR: ${dailyHeartRates}">
+                                                    <td th:text="${#temporals.format(dailyHR.timestamp, 'dd/MM/yyyy')}">10/05/2023</td>
+                                                    <td th:text="${#temporals.format(dailyHR.timestamp, 'HH:mm:ss')}">10:00</td>
+                                                    <td th:text="${dailyHR.sbp + ' / ' + dailyHR.dbp}">90</td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -211,25 +190,24 @@
                                 </div>
                                 <div class="card-body"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                                     <div class="table-responsive table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info" style="max-height: 700px;">
-                                        <table class="table my-0" id="dataTable">
+                                        <table class="table my-0" style="max-height: 1000px" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
                                                     <th>Description</th>
                                                     <th>Dosage</th>
                                                     <th>Frequency</th>
-                                                    <th>Dosage</th>
+                                                    <th>Duration</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="text-truncate">Lisinopril</td>
-                                                    <td style="max-width: 150px;">Lisinopril is used to treat high blood pressure. Lowering high blood pressure helps prevent strokes, heart attacks, and kidney problems. It is also used to treat heart failure and to improve survival after a heart attack.</td>
-                                                    <td>10mg</td>
-                                                    <td>1 time a day</td>
-                                                    <td class="text-truncate">1 month</td>
+                                                <tr th:each="medication: ${medications}">
+                                                    <td th:text="${medication.name}" class="text-truncate">Medication name</td>
+                                                    <td th:text="${medication.description}" style="max-width: 150px;">Medication description</td>
+                                                    <td th:text="${medication.dosage}" >10mg</td>
+                                                    <td th:text="${medication.frequency}">1 time a day</td>
+                                                    <td th:text="${medication.duration}" class="text-truncate">1 month</td>
                                                 </tr>
-                                                <tr></tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -237,7 +215,7 @@
                                                     <td class="text-truncate"><strong>Description</strong></td>
                                                     <td><strong>Dosage</strong></td>
                                                     <td><strong>Frequency</strong></td>
-                                                    <td><strong>Dosage</strong></td>
+                                                    <td><strong>Duration</strong></td>
                                                 </tr>
                                             </tfoot>
                                         </table>

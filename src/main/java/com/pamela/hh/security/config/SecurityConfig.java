@@ -38,7 +38,8 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers("/api/**", "/register/**", "/login", "/logout*",
                                 "/resources/**", "/assets/**").permitAll()
-                        .requestMatchers("/", "/index", "/profile", "/register-all/**", "/settings/**")
+                        .requestMatchers("/", "/index", "/profile", "/register-all/**", "/settings/**",
+                                "/view/**")
                         .fullyAuthenticated()
                         .anyRequest().authenticated()
                 )

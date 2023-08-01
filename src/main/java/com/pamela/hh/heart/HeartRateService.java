@@ -31,4 +31,8 @@ public class HeartRateService {
     public Optional<List<HeartRate>> getHeartRatesByPatientId(Long id) {
         return heartRateRepository.findByPatientId(id);
     }
+
+    public Optional<List<HeartRate>> getLatestHeartRateByUserId(Long id) {
+        return heartRateRepository.findTopByPatientIdOrderByDateDesc(id);
+    }
 }
