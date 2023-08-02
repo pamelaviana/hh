@@ -92,7 +92,8 @@ public class ReportController extends BaseController {
         String bmi = String.format("%.2f", BMICalculator.calculateBMI(patient));
 
         List<HeartRate> dailyHeartRates = HeartRateStat.builder()
-                        .year(LocalDate.now().getYear()).build()
+                        .year(LocalDate.now().getYear())
+                        .month(LocalDate.now().getMonthValue()).build()
                         .getFilteredByDay(heartRates, LocalDate.now().getDayOfMonth());
 
         Map<String, HeartRateAvg> avgHeartRates = HeartRateStat.builder()

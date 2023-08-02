@@ -14,9 +14,11 @@ import java.util.*;
 public class HeartRateStat {
 
     @Builder.Default private int year = -1;
+    @Builder.Default private int month = -1;
 
     public Map<String, HeartRateAvg> getAverageGroupedByDay(List<HeartRate> heartRates){
         heartRates = filterByYear(heartRates);
+        heartRates = filterByYearAndMonth(heartRates);
         Map<Integer, List<HeartRate>> tempMap = new TreeMap<>();
         heartRates.forEach(heartRate -> {
             int day = heartRate.getTimestamp().getDayOfMonth();
@@ -35,6 +37,7 @@ public class HeartRateStat {
 
     public Map<String, HeartRateAvg> getAverageGroupedByMonth(List<HeartRate> heartRates){
         heartRates = filterByYear(heartRates);
+        heartRates = filterByYearAndMonth(heartRates);
         Map<Integer, List<HeartRate>> tempMap = new TreeMap<>();
         heartRates.forEach(heartRate -> {
             int month = heartRate.getTimestamp().getMonth().getValue();
@@ -82,7 +85,7 @@ public class HeartRateStat {
     }
 
     public List<HeartRate> getFilteredByDay(List<HeartRate> heartRates, int day){
-        heartRates = filterByYear(heartRates);
+        heartRates = filterByYearAndMonth(heartRates);
         return filterByDay(heartRates, day);
     }
 
@@ -93,6 +96,17 @@ public class HeartRateStat {
         List<HeartRate> filtered = new ArrayList<>();
         heartRates.forEach(heartRate -> {
             if (heartRate.getTimestamp().getDayOfMonth() == day) {
+                filtered.add(heartRate);
+            }
+        });
+        return filtered;
+    }
+
+    private List<HeartRate> filterByYearAndMonth(List<HeartRate> heartRates) { // Modified method name
+        List<HeartRate> filtered = new ArrayList<>();
+        heartRates.forEach(heartRate -> {
+            if ((year == -1 || heartRate.getTimestamp().getYear() == year) &&
+                    (month == -1 || heartRate.getTimestamp().getMonth().getValue() == month)) {
                 filtered.add(heartRate);
             }
         });

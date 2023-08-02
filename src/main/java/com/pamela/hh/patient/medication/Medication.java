@@ -26,7 +26,7 @@ public class Medication extends BaseEntity implements Serializable {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false, unique = true)
+    @JoinColumn(name = "patient_id", nullable = false)
     private User patient;
 
     @ManyToOne

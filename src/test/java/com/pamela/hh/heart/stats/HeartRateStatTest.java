@@ -56,14 +56,15 @@ public class HeartRateStatTest {
     public void testFilterByDay() {
         List<HeartRate> heartRates = HeartRateGenerator.builder()
                 .yearMin(2020).yearMax(2024)
-                .dayMin(1).dayMax(5)
-                .build().generateRand(20);
+                .monthMax(5).monthMin(10)
+                .dayMin(1).dayMax(3)
+                .build().generateRand(100);
 
-        List<HeartRate> filtered = HeartRateStat.builder().year(2023)
+        List<HeartRate> filtered = HeartRateStat.builder().year(2023).month(8)
                 .build().getFilteredByDay(heartRates, 2);
 
         for(HeartRate heartRate : filtered) {
-            System.out.println(heartRate);
+            System.out.println(heartRate.getTimestamp());
         }
     }
 }

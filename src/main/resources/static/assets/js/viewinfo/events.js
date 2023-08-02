@@ -1,4 +1,5 @@
 let userId = document.getElementById("userId");
+let medicationId = document.getElementById("medicationId");
 let name = document.getElementById("name");
 let description = document.getElementById("description");
 let dosage = document.getElementById("dosage");
@@ -20,6 +21,7 @@ btnRegisterAndUpdate.addEventListener("click", function () {
         event.preventDefault();
         var url = btnRegisterAndUpdate.getAttribute('data-url') + "/" + userId.value;
         var medication = {
+            id: medicationId.value,
             name: name.value,
             description: description.value,
             dosage: dosage.value,
@@ -41,6 +43,7 @@ btnRegisterAndUpdate.addEventListener("click", function () {
 
 var editMedication = function (self) {
     isEditMode = true;
+    medicationId.value = self.getAttribute('data-id');
     name.value = self.getAttribute('data-name');
     description.value = self.getAttribute('data-description');
     dosage.value = self.getAttribute('data-dosage');

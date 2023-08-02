@@ -62,16 +62,18 @@ public class ViewInfoController extends BaseController {
             Patient patient = patientService.getByUserId(id)
                     .orElseThrow(() -> new RuntimeException("You have to be a patient or become one"));
 
-            PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(user)
+            User userPatient = patient.getPatient();
+
+            PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(userPatient)
                     .orElseThrow(() -> new RuntimeException("Patient policy not found"));
 
-            Address address = addressService.getByUserId(user.getId())
+            Address address = addressService.getByUserId(userPatient.getId())
                     .orElseThrow(() -> new RuntimeException("Address not found"));
-            List<Medication> medication = medicationService.getMedicationsByPatientId(user.getId())
+            List<Medication> medication = medicationService.getMedicationsByPatientId(userPatient.getId())
                     .orElse(new ArrayList<>());
 
             model.addAttribute("user", user);
-            model.addAttribute("userPatient", user);
+            model.addAttribute("userPatient", userPatient);
             model.addAttribute("patientPolicy", patientPolicy);
             model.addAttribute("address", address);
             model.addAttribute("medications", medication);
@@ -89,8 +91,9 @@ public class ViewInfoController extends BaseController {
                         @AuthenticationPrincipal User userSession) {
 
         List<Alert> listAlertMessage = new ArrayList<>();
+        User userPatient = medication.getPatient();
         try {
-            medication.setPatient(userSession);
+            medication.setDoctor(userSession);
             MedicationValidator.validateMedication(medication);
             medicationService.save(medication);
             listAlertMessage.add(Alert.builder().success().message("Medication added successfully.").build());
@@ -98,7 +101,7 @@ public class ViewInfoController extends BaseController {
             listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
         }
         addUIAlertToSession(session, listAlertMessage);
-        return "redirect:/view/patient/" + userSession.getId();
+        return "redirect:/view/patient/" + userPatient.getId();
     }
 
     @DeleteMapping("/patient/{id}")
@@ -129,17 +132,21 @@ public class ViewInfoController extends BaseController {
 
         Map<String, String> response = new HashMap<>();
         List<Alert> listAlertMessage = new ArrayList<>();
+        flagAllUIAlertsIfAny(model, session);
         try {
-            medication.setPatient(userSession);
+            Patient patient = patientService.getByUserId(id)
+                    .orElseThrow(() -> new RuntimeException("The patient you want to update the medication doesn't exist"));
+            medication.setPatient(patient.getPatient());
+            medication.setDoctor(userSession);
             MedicationValidator.validateMedication(medication);
             medicationService.update(medication);
+            listAlertMessage.add(Alert.builder().success().message("Medication updated successfully.").build());
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
             response.put("message", "Error updating medication");
         }
         addUIAlertToSession(session, listAlertMessage);
-        response.put("url", "/view/patient/" + userSession.getId());
-        response.put("message", "Medication updated successfully.");
+        response.put("url", "/view/patient/" + id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

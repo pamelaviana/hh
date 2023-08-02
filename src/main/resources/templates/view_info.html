@@ -114,7 +114,8 @@
                                             <div class="col"></div>
                                         </div>
                                         <input class="form-control" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                        <input th:value="${userPatient.id}" id="userId" class="form-control" type="hidden" name="userId">
+                                        <input th:value="${userPatient.id}" id="userId" class="form-control" type="hidden" name="patient">
+                                        <input id="medicationId" class="form-control" type="hidden" name="medication">
                                         <div class="text-end mb-3">
                                             <button id="btnClear" class="btn btn-success btn-sm link-light me-2" type="reset" style="min-width: 80px;">Clear</button>
                                             <button data-url="/view/patient" id="btnRegisterAndUpdate" class="btn btn-primary btn-sm"

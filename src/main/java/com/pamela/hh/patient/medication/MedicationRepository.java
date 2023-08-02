@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -24,7 +25,7 @@ public interface MedicationRepository extends JpaRepository<Medication, String> 
     void deleteByDoctorId(Long id);
 
     @Query("SELECT m FROM Medication m WHERE m.patient.id = ?1")
-    Optional<ArrayList<Medication>> findByPatientId(Long id);
+    Optional<List<Medication>> findByPatientId(Long id);
 
     @Query("SELECT CASE WHEN COUNT(m) > 0 THEN TRUE ELSE FALSE END FROM Medication m WHERE m.doctor.id = ?1")
     Optional<Boolean> existsByDoctorId(Long id);

@@ -47,7 +47,7 @@ public class MedicationService {
         medicationRepository.deleteByDoctorId(id);
     }
 
-    public Optional<ArrayList<Medication>> getMedicationsByPatientId(Long id) {
+    public Optional<List<Medication>> getMedicationsByPatientId(Long id) {
         return medicationRepository.findByPatientId(id);
     }
 
