@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/**", "/register/**", "/login", "/logout*",
                                 "/resources/**", "/assets/**").permitAll()
                         .requestMatchers("/", "/index", "/profile", "/register-all/**", "/settings/**",
-                                "/view/**")
+                                "/view/**", "/check/**")
                         .fullyAuthenticated()
                         .anyRequest().authenticated()
                 )

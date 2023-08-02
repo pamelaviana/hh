@@ -19,4 +19,7 @@ public interface AlertHeartRateRepository extends JpaRepository<AlertHeartRate, 
 
     @Query("SELECT a FROM AlertHeartRate a WHERE a.doctor.id = ?1")
     Optional<List<AlertHeartRate>> getAlertHeartRateByDoctor(Long id);
+
+    @Query("SELECT a FROM AlertHeartRate a WHERE a.patient.id = ?1")
+    Optional<AlertHeartRate> getAlertHeartRateByPatient(String id);
 }

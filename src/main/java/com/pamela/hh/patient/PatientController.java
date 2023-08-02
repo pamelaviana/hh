@@ -39,9 +39,12 @@ public class PatientController extends BaseController {
                 .map(DoctorPatientMapper::getPatient)
                 .toList();
 
+        int total = patients.size();
+
         model.addAttribute("user", user);
         model.addAttribute("patients", patients);
         model.addAttribute("pageName", "Patients");
+        model.addAttribute("total", total);
         return "patients";
     }
 

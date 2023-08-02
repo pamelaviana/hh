@@ -25,7 +25,7 @@ public class Patient extends BaseEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false, unique = true)
-    private User patient;
+    protected User patient;
 
     protected @Column(nullable=false) LocalDate birthday;
     protected @Enumerated(EnumType.STRING) @Column(nullable = false) Gender gender = Gender.OTHER;

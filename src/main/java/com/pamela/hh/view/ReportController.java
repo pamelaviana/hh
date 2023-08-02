@@ -1,6 +1,7 @@
 package com.pamela.hh.view;
 
 import com.pamela.hh.doctor.DoctorPatientMapperService;
+import com.pamela.hh.entity.BaseController;
 import com.pamela.hh.heart.HeartRate;
 import com.pamela.hh.heart.HeartRateService;
 import com.pamela.hh.heart.stats.HeartRateAvg;
@@ -38,7 +39,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/report")
-public class ReportController {
+public class ReportController extends BaseController {
 
     private final UserService userService;
     private final PatientPolicyService patientPolicyService;
@@ -74,6 +75,8 @@ public class ReportController {
         if(userSession.getUserRole().equals(UserRole.PATIENT) && !userSession.getId().equals(id)){
             return "redirect:/index";
         }
+
+        flagAllUIAlertsIfAny(model, session);
 
         User userPatient = userService.getByUserId(id);
         PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(userPatient)

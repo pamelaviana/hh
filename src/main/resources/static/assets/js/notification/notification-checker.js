@@ -1,6 +1,8 @@
 let retryCount = 0; // Counter for retry attempts
 let maxRetries = 5; // Maximum retry attempts
 let receivedNotifications = {}; // Store the received notifications
+const notificationCounter = document.getElementById('notificationCounter');
+notificationCounter.innerText = '';
 
 function fetchNotifications() {
     var csrfToken = document.querySelector("[name='_csrf']").content;
@@ -23,6 +25,7 @@ function fetchNotifications() {
                 // Check if the notification was already received
                 if (!receivedNotifications[notification.id]) {
                     receivedNotifications[notification.id] = notification;
+                    notificationCounter.innerText = i + 1;
                     let notificationHTML = `
                     <div>
                         <a class="dropdown-item d-flex align-items-center" href="${notification.url || '/'}">
@@ -57,3 +60,4 @@ function fetchNotifications() {
 
 // Set an interval to fetch notifications every 30 seconds
 let intervalID = setInterval(fetchNotifications, 30000);
+fetchNotifications(); // Fetch notifications on page load

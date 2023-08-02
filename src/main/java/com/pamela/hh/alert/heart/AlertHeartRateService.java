@@ -3,7 +3,6 @@ package com.pamela.hh.alert.heart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +43,9 @@ public class AlertHeartRateService {
 
     public Optional<List<AlertHeartRate>> getAlertHeartRateByDoctor(Long id) {
         return alertHeartRateRepository.getAlertHeartRateByDoctor(id);
+    }
+
+    public Optional<AlertHeartRate> getAlertHeartRateByPatient(String id) {
+        return alertHeartRateRepository.getAlertHeartRateByPatient(id);
     }
 }
