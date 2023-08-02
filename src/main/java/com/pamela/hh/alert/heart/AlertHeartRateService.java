@@ -3,7 +3,9 @@ package com.pamela.hh.alert.heart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AlertHeartRateService {
@@ -37,5 +39,10 @@ public class AlertHeartRateService {
 
     public void deleteByPatientId(Long id) {
         alertHeartRateRepository.deleteByPatientId(id);
+    }
+
+
+    public Optional<List<AlertHeartRate>> getAlertHeartRateByDoctor(Long id) {
+        return alertHeartRateRepository.getAlertHeartRateByDoctor(id);
     }
 }

@@ -56,15 +56,19 @@ public class RegisterAllUsersController extends BaseController {
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteUser(Model model, HttpSession session, @PathVariable("id") Long id,
                                  @AuthenticationPrincipal User user) {
+
         flagAllUIAlertsIfAny(model, session);
+        List<Alert> listAlertMessage = new ArrayList<>();
         try {
             if (user != null && user.getId().equals(id)) {
                 throw new IllegalStateException("You can't delete yourself");
             }
             userService.delete(id);
+            listAlertMessage.add(Alert.builder().success().message("User removed successfully.").build());
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
         }
+        addUIAlertToSession(session, listAlertMessage);
         Map<String, String> response = new HashMap<>();
         response.put("url", "/register-all");
         response.put("message", "User removed successfully.");
@@ -80,11 +84,8 @@ public class RegisterAllUsersController extends BaseController {
             if(isUserPatient(user)){
                 createUserPolicy(user, listAlertMessage);
             }
-            RegistrationValidator.validateUser(user);
-            RegistrationValidator.validateUserRole(user);
-            ObjectUtil.process(userService.save(user),
-                    (User u) -> listAlertMessage.add(Alert.builder().success().message("User registered successfully").build()),
-                    () -> new IllegalStateException("User already exists"));
+            validateUser(user);
+            processSaveRequest(user, listAlertMessage);
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
         }
@@ -92,22 +93,23 @@ public class RegisterAllUsersController extends BaseController {
         return "redirect:/register-all";
     }
 
-    @PutMapping("/{id}")
+    private void processSaveRequest(User user, List<Alert> listAlertMessage){
+        ObjectUtil.process(userService.save(user),
+                (User u) -> listAlertMessage.add(Alert.builder().success()
+                        .message("User registered successfully").build()),
+                () -> new IllegalStateException("User already exists"));
+    }
+
+    @PutMapping
     ResponseEntity<?> putRegister(Model model, @RequestBody User user, HttpSession session,
-                       @AuthenticationPrincipal User userSession, @PathVariable("id") Long id) {
+                       @AuthenticationPrincipal User userSession) {
 
         List<Alert> listAlertMessage = new ArrayList<>();
         try {
-            if(user.getPassword().isBlank() && user.getPasswordConfirm().isBlank()){
-                User userTemp = userService.getByUserId(id);
-                user.setPassword(userTemp.getPassword());
-                user.setPasswordConfirm(userTemp.getPassword());
-            }
-            RegistrationValidator.validateUser(user);
-            RegistrationValidator.validateUserRole(user);
-            ObjectUtil.process(userService.update(user),
-                    (User u) -> listAlertMessage.add(Alert.builder().success().message("User updated successfully").build()),
-                    () -> new IllegalStateException("User already exists"));
+            keepPasswordIfChangeNotRequested(user);
+            validateUser(user);
+            createPatientPolicyIfAbsent(user, listAlertMessage);
+            processUpdateRequest(user, listAlertMessage);
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
         }
@@ -116,6 +118,32 @@ public class RegisterAllUsersController extends BaseController {
         response.put("url", "/register-all");
         response.put("message", "User removed successfully.");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private void processUpdateRequest(User user, List<Alert> listAlertMessage){
+        ObjectUtil.process(userService.update(user),
+                (User u) -> listAlertMessage.add(Alert.builder().success()
+                        .message("User updated successfully").build()),
+                () -> new IllegalStateException("User already exists"));
+    }
+
+    private void keepPasswordIfChangeNotRequested(User user){
+        User userTemp = userService.getByUserId(user.getId());
+        if(user.getPassword().isBlank() && user.getPasswordConfirm().isBlank()){
+            user.setPassword(userTemp.getPassword());
+            user.setPasswordConfirm(userTemp.getPassword());
+        }
+    }
+
+    private void validateUser(User user){
+        RegistrationValidator.validateUser(user);
+        RegistrationValidator.validateUserRole(user);
+    }
+
+    private void createPatientPolicyIfAbsent(User user, List<Alert> listAlertMessage){
+        if(patientPolicyService.getPolicyByNameAndEmail(user).isEmpty()){
+            createUserPolicy(user, listAlertMessage);
+        }
     }
 
     private boolean isUserPatient(User user){

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorPatientMapperService {
@@ -15,7 +16,7 @@ public class DoctorPatientMapperService {
         this.doctorPatientMapperRepository = doctorPatientMapperRepository;
     }
 
-    public List<DoctorPatientMapper> getDoctorPatientsById(Long doctorId) {
+    public Optional<List<DoctorPatientMapper>> getDoctorPatientsById(Long doctorId) {
         return doctorPatientMapperRepository.findByDoctorId(doctorId);
     }
 
@@ -41,5 +42,9 @@ public class DoctorPatientMapperService {
 
     public void deleteByDoctorId(Long id) {
         doctorPatientMapperRepository.deleteByDoctorId(id);
+    }
+
+    public Optional<Boolean> existsByDoctorId(Long id) {
+        return doctorPatientMapperRepository.existsByDoctorId(id);
     }
 }

@@ -1,0 +1,11 @@
+<div th:fragment="notify (notification)" >
+    <a class="dropdown-item d-flex align-items-center" th:href="${notification.url?} ?: '/'">
+        <div class="me-3">
+            <div th:class="${notification?.type ?: 'bg-info fas fa-info-circle'}" ><i class="fas fa-exclamation-triangle text-white"></i></div>
+        </div>
+        <div><span th:text="${notification?.date}" class="small text-gray-500">December 2, 2019</span>
+            <span th:text="${notification?.time}" class="float-end small text-gray-500">12:00</span>
+            <p th:text="${notification?.message}">Message Here</p>
+        </div>
+    </a>
+</div>

@@ -26,4 +26,7 @@ public interface HeartRateRepository extends JpaRepository<HeartRate, Long> {
 
     @Query("SELECT h FROM HeartRate h WHERE h.user.id = ?1 ORDER BY h.timestamp DESC")
     Optional<List<HeartRate>> findTopByPatientIdOrderByDateDesc(Long id);
+
+    @Query("SELECT CASE WHEN COUNT(h) > 0 THEN TRUE ELSE FALSE END FROM HeartRate h WHERE h.user.id = ?1")
+    Optional<Boolean> existsByUserId(Long id);
 }

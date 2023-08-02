@@ -1,5 +1,7 @@
 package com.pamela.hh.patient;
 
+import com.pamela.hh.doctor.DoctorPatientMapper;
+import com.pamela.hh.doctor.DoctorPatientMapperService;
 import com.pamela.hh.entity.BaseController;
 import com.pamela.hh.user.User;
 import jakarta.servlet.http.HttpSession;
@@ -17,9 +19,12 @@ import java.util.List;
 public class PatientController extends BaseController {
 
     private final PatientService patientService;
+    private final DoctorPatientMapperService doctorPatientMapperService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService,
+                             DoctorPatientMapperService doctorPatientMapperService) {
         this.patientService = patientService;
+        this.doctorPatientMapperService = doctorPatientMapperService;
     }
 
     @GetMapping
@@ -27,8 +32,12 @@ public class PatientController extends BaseController {
                          @AuthenticationPrincipal User user) {
 
         flagAllUIAlertsIfAny(model, session);
-        List<Patient> patients = patientService.getAll()
-                .orElse(new ArrayList<>());
+        List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperService
+                .getDoctorPatientsById(user.getId()).orElse(new ArrayList<>());
+
+        List<Patient> patients = doctorPatientMappers.stream()
+                .map(DoctorPatientMapper::getPatient)
+                .toList();
 
         model.addAttribute("user", user);
         model.addAttribute("patients", patients);

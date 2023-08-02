@@ -1,4 +1,4 @@
-let userId = document.getElementById("userId");
+let userId = document.getElementById("id");
 let firstName = document.getElementById("firstName");
 let lastName = document.getElementById("lastName");
 let email = document.getElementById("email");
@@ -19,8 +19,9 @@ btnClear.addEventListener("click", function () {
 btnRegisterAndUpdate.addEventListener("click", function () {
     if(isEditMode){
         event.preventDefault();
-        var url = btnRegisterAndUpdate.getAttribute('data-url') + "/" + userId.value;
+        var url = btnRegisterAndUpdate.getAttribute('data-url');
         var user = {
+            id: userId.value,
             firstName: firstName.value,
             lastName: lastName.value,
             email: email.value,

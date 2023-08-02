@@ -35,4 +35,8 @@ public class HeartRateService {
     public Optional<List<HeartRate>> getLatestHeartRateByUserId(Long id) {
         return heartRateRepository.findTopByPatientIdOrderByDateDesc(id);
     }
+
+    public Optional<Boolean> existsByUserId(Long id) {
+        return heartRateRepository.existsByUserId(id);
+    }
 }

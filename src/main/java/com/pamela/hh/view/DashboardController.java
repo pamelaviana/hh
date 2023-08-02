@@ -10,11 +10,13 @@ import com.pamela.hh.patient.PatientService;
 import com.pamela.hh.patient.fitness.BMICalculator;
 import com.pamela.hh.user.User;
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -58,6 +60,33 @@ public class DashboardController extends BaseController {
         model.addAttribute("reportUrl", "/report/patient/" + user.getId());
         model.addAttribute("viewUrl", "/view/patient/" + user.getId());
         model.addAttribute("pageName", "Dashboard");
+        return "index";
+    }
+
+    @GetMapping("/patient/{id}")
+    String getPatientDashboard(Model model, HttpSession httpSession, @PathVariable("id") Long id,
+                               @AuthenticationPrincipal User user){
+
+        flagAllUIAlertsIfAny(model, httpSession);
+        Patient patient = patientService.getById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        User userPatient = patient.getPatient();
+
+        List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(patient.getId())
+                .orElse(new ArrayList<>());
+        HeartRate heartRate = latestHeartRate.stream().findFirst().orElse(new HeartRateNullObject());
+
+        String bmi = String.format("%.2f", BMICalculator.calculateBMI(patient));
+        Long userPatientId = userPatient.getId();
+
+        model.addAttribute("user", user);
+        model.addAttribute("userPatient", userPatient);
+        model.addAttribute("patient", patient);
+        model.addAttribute("bmi", bmi);
+        model.addAttribute("viewUrl", "/view/patient/" + userPatientId);
+        model.addAttribute("reportUrl", "/report/patient/" + userPatientId);
+        model.addAttribute("heartRate", heartRate);
         return "index";
     }
 

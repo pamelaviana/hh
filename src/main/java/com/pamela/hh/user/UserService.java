@@ -72,12 +72,22 @@ public class UserService implements UserDetailsService {
                         String.format("User with id %o doesn't exist", id)));
 
         if(user.getUserRole().equals(UserRole.PATIENT)){
-            patientService.deleteByUserId(user.getId());
-            heartRateService.deleteByUserId(user.getId());
-            addressService.deleteByUserId(user.getId());
+            patientService.getByUserId(user.getId())
+                    .ifPresent(patient -> patientService.delete(patient.getId()));
+
+            heartRateService.existsByUserId(user.getId())
+                    .ifPresent(bool -> heartRateService.deleteByUserId(user.getId()));
+
+            addressService.existsByUserId(user.getId())
+                    .ifPresent(bool -> addressService.deleteByUserId(user.getId()));
+
         } else if(user.getUserRole().equals(UserRole.DOCTOR)){
-            medicationService.deleteByDoctorId(user.getId());
-            doctorPatientMapperService.deleteByDoctorId(user.getId());
+
+            medicationService.existsByDoctorId(user.getId())
+                    .ifPresent(bool -> medicationService.deleteByDoctorId(user.getId()));
+
+            doctorPatientMapperService.existsByDoctorId(user.getId())
+                    .ifPresent(bool -> doctorPatientMapperService.deleteByDoctorId(user.getId()));
         }
         userRepository.delete(user);
     }

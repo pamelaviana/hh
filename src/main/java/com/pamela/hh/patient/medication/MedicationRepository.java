@@ -25,4 +25,7 @@ public interface MedicationRepository extends JpaRepository<Medication, String> 
 
     @Query("SELECT m FROM Medication m WHERE m.patient.id = ?1")
     Optional<ArrayList<Medication>> findByPatientId(Long id);
+
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN TRUE ELSE FALSE END FROM Medication m WHERE m.doctor.id = ?1")
+    Optional<Boolean> existsByDoctorId(Long id);
 }

@@ -50,4 +50,8 @@ public class MedicationService {
     public Optional<ArrayList<Medication>> getMedicationsByPatientId(Long id) {
         return medicationRepository.findByPatientId(id);
     }
+
+    public Optional<Boolean> existsByDoctorId(Long id) {
+        return medicationRepository.existsByDoctorId(id);
+    }
 }

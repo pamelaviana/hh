@@ -62,16 +62,18 @@ public class ViewInfoController extends BaseController {
             Patient patient = patientService.getByUserId(id)
                     .orElseThrow(() -> new RuntimeException("Patient not found or your are not a patient"));
 
-            PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(user)
+            User userPatient = patient.getPatient();
+
+            PatientPolicy patientPolicy = patientPolicyService.getPolicyByNameAndEmail(userPatient)
                     .orElseThrow(() -> new RuntimeException("Patient policy not found"));
 
-            Address address = addressService.getByUserId(user.getId())
+            Address address = addressService.getByUserId(userPatient.getId())
                     .orElseThrow(() -> new RuntimeException("Address not found"));
-            List<Medication> medication = medicationService.getMedicationsByPatientId(user.getId())
+            List<Medication> medication = medicationService.getMedicationsByPatientId(userPatient.getId())
                     .orElse(new ArrayList<>());
 
             model.addAttribute("user", user);
-            model.addAttribute("userPatient", user);
+            model.addAttribute("userPatient", userPatient);
             model.addAttribute("patientPolicy", patientPolicy);
             model.addAttribute("address", address);
             model.addAttribute("medications", medication);

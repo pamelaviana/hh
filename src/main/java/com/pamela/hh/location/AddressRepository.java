@@ -22,4 +22,7 @@ public interface AddressRepository extends JpaRepository<Address, String> {
 
     @Query("SELECT a FROM Address a WHERE a.address1 = ?1 AND a.city = ?2 AND a.country = ?3")
     Optional<Address> existsByAddress(String address1, String city, String country);
+
+    @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END FROM Address a WHERE a.user.id = ?1")
+    Optional<Boolean> existsByUserId(Long id);
 }

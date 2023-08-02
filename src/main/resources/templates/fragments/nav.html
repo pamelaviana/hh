@@ -1,14 +1,16 @@
 <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark h-100">
-    <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-        <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-h-square"></i></div>
-        <div class="sidebar-brand-text mx-3"><span>hypertension</span></div>
-    </a>
+    <div class="container-fluid d-flex flex-column p-0">
+        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/">
+<!--        <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-h-square"></i></div>-->
+            <img style="width:38px; height: 38px" th:src="@{/assets/img/login_register/hh_logo.svg}">
+            <div class="sidebar-brand-text ms-1"><span>hypertension</span></div>
+        </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
             <li class="nav-item">
                 <a class="nav-link active" th:href="@{/index}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
             </li>
-            <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'PATIENT'}">
+            <li class="nav-item">
                 <a class="nav-link" th:href="@{/profile}"><i class="fas fa-user"></i><span>Profile</span></a>
             </li>
             <li class="nav-item" th:if="${#strings.trim(#authentication.principal.userRole) == 'DOCTOR'}">

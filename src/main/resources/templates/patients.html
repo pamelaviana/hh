@@ -52,7 +52,7 @@
                                     <tbody>
                                         <tr th:each="pt: ${patients}">
                                             <td>
-                                                <a href="/">
+                                                <a th:href="@{/index/patient/{id}(id=${pt.id})}">
                                                     <img class="rounded-circle me-2" width="30" height="30" th:src="@{/assets/img/avatars/profile.jpg}">
                                                     <span th:text="${pt.patient.getUsername()}" style="color: rgb(133, 135, 150);">Airi Satou</span>
                                                 </a>
@@ -99,10 +99,12 @@
             <footer th:insert="~{fragments/footer :: footer}"></footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    <input class="form-control" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/assets/js/script.min.js}"></script>
     <script th:src="@{/assets/js/base.js}"></script>
     <script th:src="@{/assets/js/requests.js}"></script>
+    <script th:src="@{/assets/js/notification/notification-checker.js}"></script>
 </body>
 </html>

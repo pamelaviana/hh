@@ -53,4 +53,8 @@ public class AddressService {
                 address.getCity(),
                 address.getCountry());
     }
+
+    public Optional<Boolean> existsByUserId(Long id) {
+        return addressRepository.existsByUserId(id);
+    }
 }
