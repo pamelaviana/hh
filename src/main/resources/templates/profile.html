@@ -19,7 +19,8 @@
                                 <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" id="imageProfile" th:src="@{/assets/img/avatars/profile.jpg}" width="160" height="160">
                                     <div class="mb-3"><button class="btn btn-primary btn-sm" id="uploadImage" type="button">Change Photo</button></div>
                                 </div>
-                                <div class="card-body text-center shadow mt-3">
+                                <div th:if="${user.userRole.name() == 'PATIENT'}"
+                                     class="card-body text-center shadow mt-3">
                                     <form action="/profile/doctor" method="post">
                                         <div>
                                             <input class="form-control" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">

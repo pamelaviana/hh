@@ -49,7 +49,7 @@ public class DoctorPatientMapperService {
         return doctorPatientMapperRepository.existsByDoctorId(id);
     }
 
-    public Optional<ArrayList<DoctorPatientMapper>> getAllDoctorsByPatientId(Long id) {
+    public Optional<List<DoctorPatientMapper>> getAllDoctorsByPatientId(Long id) {
         return doctorPatientMapperRepository.findAllByPatientId(id);
     }
 }

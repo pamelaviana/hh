@@ -36,5 +36,5 @@ public interface DoctorPatientMapperRepository extends JpaRepository<DoctorPatie
     Optional<Boolean> existsByDoctorId(Long id);
 
     @Query("SELECT dpm FROM DoctorPatientMapper dpm WHERE dpm.patient.id = ?1")
-    Optional<ArrayList<DoctorPatientMapper>> findAllByPatientId(Long id);
+    Optional<List<DoctorPatientMapper>> findAllByPatientId(Long id);
 }

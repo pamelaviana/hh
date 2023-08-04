@@ -29,7 +29,7 @@ class BarChart {
       },
       title: {
         fontStyle: 'normal',
-        text:"Daily Measurment",
+        text:"Monthly Measurement",
         display:true,
         position:"bottom"
       },

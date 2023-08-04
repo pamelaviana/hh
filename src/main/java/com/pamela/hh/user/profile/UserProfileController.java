@@ -74,7 +74,11 @@ public class UserProfileController extends BaseController {
             Patient patient = getPatient(user, listAlertMessage);
             model.addAttribute("patient", patient);
 
-            getAllDoctors(model, user);
+           if (user.getUserRole().equals(UserRole.PATIENT)){
+                getAllDoctors(model, patient.getId());
+           } else {
+               getAllDoctors(model, user.getId());
+           }
 
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().warning().message(e.getMessage()).build());
@@ -87,10 +91,11 @@ public class UserProfileController extends BaseController {
         return "profile";
     }
 
-    private void getAllDoctors(Model model, User user) {
+    private void getAllDoctors(Model model, long id) {
         List<User> doctors = userService.getAllDoctors().orElse(new ArrayList<>());
+
         List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperService
-                .getAllDoctorsByPatientId(user.getId()).orElse(new ArrayList<>());
+                .getAllDoctorsByPatientId(id).orElse(new ArrayList<>());
 
         DoctorPatientMapper doctorPatientMapper = doctorPatientMappers.stream().findFirst()
                         .orElse(new DoctorPatientMapperNullObject());

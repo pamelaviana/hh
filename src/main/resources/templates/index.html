@@ -19,7 +19,8 @@
                         </a>
                     </div>
                     <div class="row">
-                        <div class="col mb-4">
+                        <div th:if="${userPatient.userRole.name() == 'PATIENT'}"
+                                class="col mb-4"> <!-- Don't show for a doctor -->
                             <div class="card shadow border-start-primary py-2">
                                 <div class="card-body">
                                     <div class="row align-items-center no-gutters">

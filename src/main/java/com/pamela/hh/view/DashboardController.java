@@ -8,6 +8,7 @@ import com.pamela.hh.entity.BaseController;
 import com.pamela.hh.heart.HeartRate;
 import com.pamela.hh.heart.HeartRateNullObject;
 import com.pamela.hh.heart.HeartRateService;
+import com.pamela.hh.heart.stats.HeartRateAvg;
 import com.pamela.hh.heart.stats.HeartRateStat;
 import com.pamela.hh.patient.Patient;
 import com.pamela.hh.patient.PatientNullObject;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -61,14 +63,18 @@ public class DashboardController extends BaseController {
 
         String bmi = String.format("%.2f", BMICalculator.calculateBMI(patient));
 
-        List<HeartRate> dailyHeartRates = HeartRateStat.builder()
-                .year(LocalDate.now().getYear())
-                .month(LocalDate.now().getMonthValue())
-                .build()
-                .getFilteredByDay(latestHeartRate, LocalDate.now().getDayOfMonth());
+//        List<HeartRate> dailyHeartRates = HeartRateStat.builder()
+//                .year(LocalDate.now().getYear())
+//                .month(LocalDate.now().getMonthValue())
+//                .build()
+//                .getFilteredByDay(latestHeartRate, LocalDate.now().getDayOfMonth());
+
+        Map<String, HeartRateAvg> monthlyHeartRate = HeartRateStat.builder()
+                .year(LocalDate.now().getYear()).build()
+                .getAverageGroupedByMonth(latestHeartRate);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        ChartData chartData = mapDailyHeartRateToChartData(dailyHeartRates);
+        ChartData chartData = mapMonthlyHeartRateToChartData(monthlyHeartRate);
         String jsonString = null;
         try {
             jsonString = objectMapper.writeValueAsString(chartData);
@@ -153,6 +159,27 @@ public class DashboardController extends BaseController {
         });
         return ChartData.builder().labels(labels)
                 .dataset(List.of(datasetSystolic, datasetDiastolic)).build();
+    }
+
+    private ChartData mapMonthlyHeartRateToChartData(Map<String, HeartRateAvg> monthlyHeartRate) {
+
+            ChartData.Dataset datasetSystolic = ChartData.Dataset.builder()
+                    .label("Systolic").backgroundColor("#4e73df")
+                    .borderColor("#4e73df").build();
+
+            ChartData.Dataset datasetDiastolic = ChartData.Dataset.builder()
+                    .label("Diastolic").backgroundColor("#36b9cc")
+                    .borderColor("#36b9cc").build();
+
+            List<String> labels = new ArrayList<>();
+
+            monthlyHeartRate.forEach((month, heartRateAvg) -> {
+                datasetSystolic.getData().add(heartRateAvg.getSbpAvg());
+                datasetDiastolic.getData().add(heartRateAvg.getDbpAvg());
+                labels.add(month);
+            });
+            return ChartData.builder().labels(labels)
+                    .dataset(List.of(datasetSystolic, datasetDiastolic)).build();
     }
 
 }
