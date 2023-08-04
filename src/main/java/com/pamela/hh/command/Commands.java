@@ -98,7 +98,7 @@ public class Commands {
                     .build();
             userService.save(admin);
 
-            User doctor = User.builder()
+            User doctorJohn = User.builder()
                     .id(3L)
                     .firstName("John")
                     .lastName("Doe")
@@ -106,9 +106,9 @@ public class Commands {
                     .password("12345678")
                     .userRole(UserRole.DOCTOR)
                     .build();
-            userService.save(doctor);
+            userService.save(doctorJohn);
 
-            User doctor2 = User.builder()
+            User doctorJane = User.builder()
                     .id(4L)
                     .firstName("Jane")
                     .lastName("Smith")
@@ -116,9 +116,9 @@ public class Commands {
                     .password("12345678")
                     .userRole(UserRole.DOCTOR)
                     .build();
-            userService.save(doctor2);
+            userService.save(doctorJane);
 
-            Patient patient = Patient.builder()
+            Patient patientPamela = Patient.builder()
                     .id(1L)
                     .patient(pamela)
                     .birthday(LocalDate.now().minusYears(20))
@@ -127,7 +127,7 @@ public class Commands {
                     .weight(60f)
                     .smoker(Smoker.NO)
                     .build();
-            patientService.save(patient);
+            patientService.save(patientPamela);
 
             User brian = User.builder()
                     .id(5L)
@@ -139,7 +139,7 @@ public class Commands {
                     .build();
             userService.save(brian);
 
-            Patient patient1 = Patient.builder()
+            Patient patientBrian = Patient.builder()
                     .id(2L)
                     .patient(brian)
                     .birthday(LocalDate.now().minusYears(32))
@@ -148,19 +148,93 @@ public class Commands {
                     .weight(80f)
                     .smoker(Smoker.MODERATE)
                     .build();
-            patientService.save(patient1);
+            patientService.save(patientBrian);
 
-            DoctorPatientMapper doctorPatientMapper = DoctorPatientMapper.builder()
-                    .patient(patient)
-                    .doctor(doctor)
+            User charles = User.builder()
+                    .id(6L)
+                    .firstName("Charles")
+                    .lastName("Smith")
+                    .email("charles@hotmail.com")
+                    .password("12345678")
+                    .userRole(UserRole.PATIENT)
                     .build();
-            doctorPatientMapperService.save(doctorPatientMapper);
+            userService.save(charles);
 
-            DoctorPatientMapper doctorPatientMapper2 = DoctorPatientMapper.builder()
-                    .patient(patient1)
-                    .doctor(doctor2)
+            Patient charlesPatient = Patient.builder()
+                    .id(3L)
+                    .patient(charles)
+                    .birthday(LocalDate.now().minusYears(46))
+                    .gender(Gender.MALE)
+                    .height(1.80f)
+                    .weight(75f)
+                    .smoker(Smoker.LIGHT)
                     .build();
-            doctorPatientMapperService.save(doctorPatientMapper2);
+            patientService.save(charlesPatient);
+
+            User henry = User.builder()
+                    .id(7L)
+                    .firstName("Henry")
+                    .lastName("Smith")
+                    .email("henry@email.com")
+                    .password("12345678")
+                    .userRole(UserRole.DOCTOR)
+                    .build();
+            userService.save(henry);
+
+            User doctorJessica = User.builder()
+                    .id(8L)
+                    .firstName("Jessica")
+                    .lastName("Smith")
+                    .email("jessica@email.com")
+                    .password("12345678")
+                    .userRole(UserRole.DOCTOR)
+                    .build();
+            userService.save(doctorJessica);
+
+            User victor = User.builder()
+                    .id(9L)
+                    .firstName("Victor")
+                    .lastName("Smith")
+                    .email("victor@email.com")
+                    .password("12345678")
+                    .userRole(UserRole.PATIENT)
+                    .build();
+            userService.save(victor);
+
+            Patient patientVictor = Patient.builder()
+                    .id(4L)
+                    .patient(victor)
+                    .birthday(LocalDate.now().minusYears(18))
+                    .gender(Gender.MALE)
+                    .height(1.78f)
+                    .weight(78f)
+                    .smoker(Smoker.NO)
+                    .build();
+            patientService.save(patientVictor);
+
+            DoctorPatientMapper johnToPamela = DoctorPatientMapper.builder()
+                    .patient(patientPamela)
+                    .doctor(doctorJohn)
+                    .build();
+            doctorPatientMapperService.save(johnToPamela);
+
+            DoctorPatientMapper janeToBrian = DoctorPatientMapper.builder()
+                    .patient(patientBrian)
+                    .doctor(doctorJane)
+                    .build();
+            doctorPatientMapperService.save(janeToBrian);
+
+            DoctorPatientMapper jessicaToCharles = DoctorPatientMapper.builder()
+                    .patient(charlesPatient)
+                    .doctor(doctorJessica)
+                    .build();
+            doctorPatientMapperService.save(jessicaToCharles);
+
+            DoctorPatientMapper henryToVictor = DoctorPatientMapper.builder()
+                    .patient(patientVictor)
+                    .doctor(henry)
+                    .build();
+            doctorPatientMapperService.save(henryToVictor);
 
             DeviceToken deviceToken = DeviceToken.builder()
                     .expirationDate(LocalDate.now())
@@ -215,7 +289,7 @@ public class Commands {
 
             Medication medication = Medication.builder()
                     .patient(pamela)
-                    .doctor(doctor)
+                    .doctor(doctorJohn)
                     .name("Lisinopril")
                     .description("Lisinopril is used to treat high blood pressure. " +
                             "Lowering high blood pressure helps prevent strokes, heart attacks, " +
@@ -230,25 +304,48 @@ public class Commands {
             int currentYear = LocalDate.now().getYear();
             int currentMonth = LocalDate.now().getMonthValue();
             int currentDay = LocalDate.now().getDayOfMonth();
-            List<HeartRate> heartRates = HeartRateGenerator.builder()
+
+            List<HeartRate> pamelaHeartRates = HeartRateGenerator.builder()
                     .yearMin(currentYear).yearMax(currentYear + 1)
                     .monthMax(currentMonth).monthMin(currentMonth + 2)
                     .dayMin(currentDay).dayMax(currentDay + 2)
                     .build().generateRand(25);
 
-            heartRates.forEach(heartRate -> {
+            pamelaHeartRates.forEach(heartRate -> {
                 heartRate.setUser(pamela);
                 heartRateService.save(heartRate);
             });
 
-            List<HeartRate> heartRates2 = HeartRateGenerator.builder()
+            List<HeartRate> brianHeartRates = HeartRateGenerator.builder()
                     .yearMin(currentYear).yearMax(currentYear + 1)
                     .monthMax(currentMonth).monthMin(currentMonth + 2)
                     .dayMin(currentDay).dayMax(currentDay + 3)
                     .build().generateRand(30);
 
-            heartRates2.forEach(heartRate -> {
+            brianHeartRates.forEach(heartRate -> {
                 heartRate.setUser(brian);
+                heartRateService.save(heartRate);
+            });
+
+            List<HeartRate> charlesHeartRates = HeartRateGenerator.builder()
+                    .yearMin(currentYear).yearMax(currentYear + 1)
+                    .monthMax(currentMonth).monthMin(currentMonth + 2)
+                    .dayMin(currentDay).dayMax(currentDay + 3)
+                    .build().generateRand(30);
+
+            charlesHeartRates.forEach(heartRate -> {
+                heartRate.setUser(charles);
+                heartRateService.save(heartRate);
+            });
+
+            List<HeartRate> victorHeartRates = HeartRateGenerator.builder()
+                    .yearMin(currentYear).yearMax(currentYear + 1)
+                    .monthMax(currentMonth).monthMin(currentMonth + 2)
+                    .dayMin(currentDay).dayMax(currentDay + 3)
+                    .build().generateRand(30);
+
+            victorHeartRates.forEach(heartRate -> {
+                heartRate.setUser(victor);
                 heartRateService.save(heartRate);
             });
 
