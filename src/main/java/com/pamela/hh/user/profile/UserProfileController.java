@@ -222,8 +222,12 @@ public class UserProfileController extends BaseController {
         flagAllUIAlertsIfAny(model, session);
         try {
 
+            if (user == null || user.getId() < 1) {
+                return ResponseEntity.ok(response);
+            }
+
             Patient patient = patientService.getByUserId(userSession.getId())
-                    .orElseThrow(() -> new IllegalStateException("You must be a patient to assign a doctor"));
+                    .orElseThrow(() -> new IllegalStateException("Please fill your patient details to assign doctor"));
 
             User registerDoctor = Optional.ofNullable(userService.getByUserId(user.getId()))
                             .orElseThrow(() -> new IllegalStateException("Doctor doesn't exist"));
