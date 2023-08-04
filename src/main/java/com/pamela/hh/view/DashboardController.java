@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = {"/", "index"})
@@ -52,7 +53,7 @@ public class DashboardController extends BaseController {
         Patient patient = patientService.getByUserId(user.getId())
                 .orElse(new PatientNullObject());
 
-        User userPatient = patient.getPatient();
+        User userPatient = Optional.ofNullable(patient.getPatient()).orElse(user);
 
         List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(userPatient.getId())
                 .orElse(new ArrayList<>());
