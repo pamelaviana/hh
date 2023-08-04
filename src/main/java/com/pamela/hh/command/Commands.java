@@ -27,8 +27,10 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.util.List;
 
-//@Configuration
+@Configuration
 public class Commands {
+
+    private final boolean IGNORE_TEST_DATA = true;
 
     private final UserService userService;
     private final PatientService patientService;
@@ -63,6 +65,10 @@ public class Commands {
     @Bean
     CommandLineRunner commandLineRunner() {
         return args -> {
+
+            if (IGNORE_TEST_DATA) {
+                return;
+            }
 
             PatientPolicy patientPolicy = PatientPolicy.builder()
                     .firstName("Pamela")
