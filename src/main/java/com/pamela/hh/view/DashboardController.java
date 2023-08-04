@@ -104,9 +104,9 @@ public class DashboardController extends BaseController {
         Patient patient = patientService.getById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        User userPatient = patient.getPatient();
+        User userPatient = Optional.ofNullable(patient.getPatient()).orElse(user);
 
-        List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(patient.getId())
+        List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(userPatient.getId())
                 .orElse(new ArrayList<>());
         HeartRate heartRate = latestHeartRate.stream().findFirst().orElse(new HeartRateNullObject());
 

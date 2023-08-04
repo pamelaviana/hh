@@ -100,6 +100,10 @@ public class UserProfileController extends BaseController {
         DoctorPatientMapper doctorPatientMapper = doctorPatientMappers.stream().findFirst()
                         .orElse(new DoctorPatientMapperNullObject());
 
+        if (!doctors.isEmpty()) {
+            doctors.add(0, User.builder().firstName("").lastName("").id(-1L).build());
+        }
+
         model.addAttribute("doctors", doctors);
         model.addAttribute("assignedDoctor", doctorPatientMapper);
     }
