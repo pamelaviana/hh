@@ -113,13 +113,18 @@ public class DashboardController extends BaseController {
         String bmi = String.format("%.2f", BMICalculator.calculateBMI(patient));
         Long userPatientId = userPatient.getId();
 
-        List<HeartRate> dailyHeartRates = HeartRateStat.builder()
-                .year(LocalDate.now().getYear())
-                .build()
-                .getFilteredByDay(latestHeartRate, LocalDate.now().getDayOfMonth());
+        //        List<HeartRate> dailyHeartRates = HeartRateStat.builder()
+//                .year(LocalDate.now().getYear())
+//                .month(LocalDate.now().getMonthValue())
+//                .build()
+//                .getFilteredByDay(latestHeartRate, LocalDate.now().getDayOfMonth());
+
+        Map<String, HeartRateAvg> monthlyHeartRate = HeartRateStat.builder()
+                .year(LocalDate.now().getYear()).build()
+                .getAverageGroupedByMonth(latestHeartRate);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        ChartData chartData = mapDailyHeartRateToChartData(dailyHeartRates);
+        ChartData chartData = mapMonthlyHeartRateToChartData(monthlyHeartRate);
         String jsonString = null;
         try {
             jsonString = objectMapper.writeValueAsString(chartData);

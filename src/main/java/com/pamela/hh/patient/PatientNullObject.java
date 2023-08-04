@@ -6,6 +6,7 @@ import com.pamela.hh.user.User;
 public class PatientNullObject extends Patient {
 
     public PatientNullObject() {
+        this.setId(-1L);
         this.weight = 0;
         this.height = 0;
         this.gender = Gender.OTHER;

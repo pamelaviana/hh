@@ -29,7 +29,7 @@
                                             </label>
                                             <select id="doctorId" class="form-select" th:data-url="@{/profile/doctor}">
                                                 <optgroup label="Doctors">
-                                                    <option th:each="doctor: ${doctors}" th:value="${doctor.Id}"
+                                                    <option class="comboBox" th:each="doctor: ${doctors}" th:value="${doctor.Id}"
                                                             th:text="${doctor.getUsername}"
                                                             th:selected="${assignedDoctor.doctor.id == doctor.Id}">John
                                                     </option>

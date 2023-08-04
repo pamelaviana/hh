@@ -74,7 +74,7 @@ public class UserProfileController extends BaseController {
             Patient patient = getPatient(user, listAlertMessage);
             model.addAttribute("patient", patient);
 
-           if (user.getUserRole().equals(UserRole.PATIENT)){
+           if (user.getUserRole().equals(UserRole.PATIENT)) {
                 getAllDoctors(model, patient.getId());
            } else {
                getAllDoctors(model, user.getId());
@@ -124,9 +124,10 @@ public class UserProfileController extends BaseController {
 
     private Patient getPatient(User user, List<Alert> listAlertMessage) {
         try {
-            return patientService.getByUserId(user.getId()).get();
+            return patientService.getByUserId(user.getId())
+                    .orElse(new PatientNullObject());
         } catch (NoSuchElementException e) {
-            listAlertMessage.add(Alert.builder().warning().message("Please add your patient").build());
+            listAlertMessage.add(Alert.builder().warning().message(e.getMessage()).build());
             return new PatientNullObject();
         }
     }
