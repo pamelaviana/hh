@@ -28,7 +28,10 @@ class BarChart {
         }
       },
       title: {
-        fontStyle: 'normal'
+        fontStyle: 'normal',
+        text:"Daily Measurment",
+        display:true,
+        position:"bottom"
       },
       scales: {
         xAxes: [

@@ -71,6 +71,13 @@ public class Commands {
                     .build();
             patientPolicyService.save(patientPolicy);
 
+            PatientPolicy patientPolicy2 = PatientPolicy.builder()
+                    .firstName("Brian")
+                    .lastName("Smith")
+                    .email("brain.smith@email.com")
+                    .build();
+            patientPolicyService.save(patientPolicy2);
+
             User pamela = User.builder()
                     .id(1L)
                     .firstName("Pamela")
@@ -122,11 +129,38 @@ public class Commands {
                     .build();
             patientService.save(patient);
 
+            User brian = User.builder()
+                    .id(5L)
+                    .firstName("Brian")
+                    .lastName("Smith")
+                    .email("brain.smith@email.com")
+                    .password("12345678")
+                    .userRole(UserRole.PATIENT)
+                    .build();
+            userService.save(brian);
+
+            Patient patient1 = Patient.builder()
+                    .id(2L)
+                    .patient(brian)
+                    .birthday(LocalDate.now().minusYears(32))
+                    .gender(Gender.MALE)
+                    .height(1.80f)
+                    .weight(80f)
+                    .smoker(Smoker.MODERATE)
+                    .build();
+            patientService.save(patient1);
+
             DoctorPatientMapper doctorPatientMapper = DoctorPatientMapper.builder()
                     .patient(patient)
                     .doctor(doctor)
                     .build();
             doctorPatientMapperService.save(doctorPatientMapper);
+
+            DoctorPatientMapper doctorPatientMapper2 = DoctorPatientMapper.builder()
+                    .patient(patient1)
+                    .doctor(doctor2)
+                    .build();
+            doctorPatientMapperService.save(doctorPatientMapper2);
 
             DeviceToken deviceToken = DeviceToken.builder()
                     .expirationDate(LocalDate.now())
@@ -168,6 +202,17 @@ public class Commands {
                     .build();
             addressService.save(address);
 
+            Address address2 = Address.builder()
+                    .user(brian)
+                    .address1("32 O'Connell Street")
+                    .address2("House 2")
+                    .city("Dublin")
+                    .state("Dublin")
+                    .zip("D02")
+                    .country("Ireland")
+                    .build();
+            addressService.save(address2);
+
             Medication medication = Medication.builder()
                     .patient(pamela)
                     .doctor(doctor)
@@ -183,14 +228,27 @@ public class Commands {
             medicationService.save(medication);
 
             int currentYear = LocalDate.now().getYear();
+            int currentMonth = LocalDate.now().getMonthValue();
             int currentDay = LocalDate.now().getDayOfMonth();
             List<HeartRate> heartRates = HeartRateGenerator.builder()
                     .yearMin(currentYear).yearMax(currentYear + 1)
+                    .monthMax(currentMonth).monthMin(currentMonth + 2)
                     .dayMin(currentDay).dayMax(currentDay + 2)
                     .build().generateRand(25);
 
             heartRates.forEach(heartRate -> {
                 heartRate.setUser(pamela);
+                heartRateService.save(heartRate);
+            });
+
+            List<HeartRate> heartRates2 = HeartRateGenerator.builder()
+                    .yearMin(currentYear).yearMax(currentYear + 1)
+                    .monthMax(currentMonth).monthMin(currentMonth + 2)
+                    .dayMin(currentDay).dayMax(currentDay + 3)
+                    .build().generateRand(30);
+
+            heartRates2.forEach(heartRate -> {
+                heartRate.setUser(brian);
                 heartRateService.save(heartRate);
             });
 

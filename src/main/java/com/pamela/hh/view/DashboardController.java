@@ -52,7 +52,9 @@ public class DashboardController extends BaseController {
         Patient patient = patientService.getByUserId(user.getId())
                 .orElse(new PatientNullObject());
 
-        List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(patient.getId())
+        User userPatient = patient.getPatient();
+
+        List<HeartRate> latestHeartRate = heartRateService.getLatestHeartRateByUserId(userPatient.getId())
                 .orElse(new ArrayList<>());
         HeartRate heartRate = latestHeartRate.stream().findFirst().orElse(new HeartRateNullObject());
 
@@ -60,6 +62,7 @@ public class DashboardController extends BaseController {
 
         List<HeartRate> dailyHeartRates = HeartRateStat.builder()
                 .year(LocalDate.now().getYear())
+                .month(LocalDate.now().getMonthValue())
                 .build()
                 .getFilteredByDay(latestHeartRate, LocalDate.now().getDayOfMonth());
 
