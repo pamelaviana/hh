@@ -60,7 +60,7 @@ public class Commands {
         this.heartRateService = heartRateService;
     }
 
-//    @Bean
+    @Bean
     CommandLineRunner commandLineRunner() {
         return args -> {
 
