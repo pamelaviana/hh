@@ -66,9 +66,7 @@ public class Commands {
     CommandLineRunner commandLineRunner() {
         return args -> {
 
-            if (IGNORE_TEST_DATA) {
-                return;
-            }
+            if (IGNORE_TEST_DATA) return;
 
             PatientPolicy patientPolicy = PatientPolicy.builder()
                     .firstName("Pamela")
