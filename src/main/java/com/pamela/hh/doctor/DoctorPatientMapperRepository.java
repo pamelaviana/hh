@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,4 +34,7 @@ public interface DoctorPatientMapperRepository extends JpaRepository<DoctorPatie
 
     @Query("SELECT CASE WHEN COUNT(dpm) > 0 THEN TRUE ELSE FALSE END FROM DoctorPatientMapper dpm WHERE dpm.patient.id = ?1")
     Optional<Boolean> existsByDoctorId(Long id);
+
+    @Query("SELECT dpm FROM DoctorPatientMapper dpm WHERE dpm.patient.id = ?1")
+    Optional<ArrayList<DoctorPatientMapper>> findAllByPatientId(Long id);
 }

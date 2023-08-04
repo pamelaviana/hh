@@ -101,6 +101,16 @@ public class Commands {
                     .build();
             userService.save(doctor);
 
+            User doctor2 = User.builder()
+                    .id(4L)
+                    .firstName("Jane")
+                    .lastName("Smith")
+                    .email("jane.smith@email.com")
+                    .password("12345678")
+                    .userRole(UserRole.DOCTOR)
+                    .build();
+            userService.save(doctor2);
+
             Patient patient = Patient.builder()
                     .id(1L)
                     .patient(pamela)

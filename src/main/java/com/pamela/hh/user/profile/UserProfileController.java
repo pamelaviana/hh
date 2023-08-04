@@ -1,6 +1,8 @@
 package com.pamela.hh.user.profile;
 
 import com.pamela.hh.alert.ui.Alert;
+import com.pamela.hh.doctor.DoctorPatientMapper;
+import com.pamela.hh.doctor.DoctorPatientMapperService;
 import com.pamela.hh.entity.BaseController;
 import com.pamela.hh.hospital.policy.PatientPolicy;
 import com.pamela.hh.hospital.policy.PatientPolicyNullObject;
@@ -12,20 +14,19 @@ import com.pamela.hh.location.AddressService;
 import com.pamela.hh.location.AddressValidator;
 import com.pamela.hh.patient.*;
 import com.pamela.hh.user.User;
+import com.pamela.hh.user.UserRole;
 import com.pamela.hh.user.UserService;
 import com.pamela.hh.user.register.RegistrationValidator;
 import com.pamela.hh.util.ObjectUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Controller
 @RequestMapping(path = "profile")
@@ -35,6 +36,7 @@ public class UserProfileController extends BaseController {
     private final PatientPolicyService patientPolicyService;
     private final AddressService addressService;
     private final PatientService patientService;
+    private final DoctorPatientMapperService doctorPatientMapperService;
 
     private final EnumSet<Gender> genders;
     private final EnumSet<Smoker> smokers;
@@ -43,17 +45,22 @@ public class UserProfileController extends BaseController {
     public UserProfileController(UserService userService,
                                  PatientPolicyService patientPolicyService,
                                  AddressService addressService,
-                                 PatientService patientService) {
+                                 PatientService patientService,
+                                 DoctorPatientMapperService doctorPatientMapperService) {
         this.userService = userService;
         this.patientPolicyService = patientPolicyService;
         this.addressService = addressService;
         this.patientService = patientService;
+        this.doctorPatientMapperService = doctorPatientMapperService;
         genders = Gender.getGenders();
         smokers = Smoker.getSmokers();
     }
 
     @GetMapping
     String getProfile(Model model, HttpSession session, @AuthenticationPrincipal User user) {
+
+        if (user == null) return "redirect:/login";
+
         List<Alert> listAlertMessage = new ArrayList<>();
         flagAllUIAlertsIfAny(model, session);
         try {
@@ -65,6 +72,9 @@ public class UserProfileController extends BaseController {
 
             Patient patient = getPatient(user, listAlertMessage);
             model.addAttribute("patient", patient);
+
+            getAllDoctors(model, user);
+
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().warning().message(e.getMessage()).build());
             addUIAlertToSession(session, listAlertMessage);
@@ -74,6 +84,17 @@ public class UserProfileController extends BaseController {
         model.addAttribute("smokers", smokers);
         model.addAttribute("pageName", "Profile");
         return "profile";
+    }
+
+    private void getAllDoctors(Model model, User user) {
+        List<User> doctors = userService.getAllDoctors().orElse(new ArrayList<>());
+        List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperService
+                .getAllDoctorsByPatientId(user.getId()).orElse(new ArrayList<>());
+
+        doctorPatientMappers.stream().findFirst().ifPresent(dpm -> {
+            model.addAttribute("doctors", doctors);
+            model.addAttribute("assignedDoctor", dpm);
+        });
     }
 
     private PatientPolicy getPatientPolicy(User user, List<Alert> listAlertMessage) {
@@ -179,5 +200,50 @@ public class UserProfileController extends BaseController {
         addUIAlertToSession(session, listAlertMessage);
         return "redirect:/profile";
     }
+
+    @PutMapping("/doctor")
+    ResponseEntity<?> assignDoctor(Model model, @RequestBody User user, HttpSession session,
+                                   @AuthenticationPrincipal User userSession) {
+
+        Map<String, Object> response = new HashMap<>();
+        List<Alert> listAlertMessage = new ArrayList<>();
+        flagAllUIAlertsIfAny(model, session);
+        try {
+            Patient patient = patientService.getByUserId(userSession.getId())
+                    .orElseThrow(() -> new IllegalStateException("You must be a patient to assign a doctor"));
+            Optional.ofNullable(userService.getByUserId(user.getId())).ifPresentOrElse(
+                    doctor -> {
+                        if (doctor.getUserRole().equals(UserRole.DOCTOR)) {
+                            doctorPatientMapperService.getAllDoctorsByPatientId(patient.getId()).ifPresentOrElse(
+                                dpm -> {
+                                    dpm.stream().findFirst().ifPresent(dp -> {
+                                        doctorPatientMapperService.deleteByDoctorId(dp.getDoctor().getId());
+                                        DoctorPatientMapper dpmNew = DoctorPatientMapper.builder()
+                                                .doctor(doctor)
+                                                .patient(patient)
+                                                .build();
+                                        doctorPatientMapperService.save(dpmNew);
+                                    });
+                                },
+                                () -> {
+                                    DoctorPatientMapper dpmNew = DoctorPatientMapper.builder()
+                                            .doctor(doctor)
+                                            .patient(patient)
+                                            .build();
+                                    doctorPatientMapperService.save(dpmNew);
+                                });
+                        }
+                    },
+                    () -> {throw new IllegalStateException("Doctor doesn't exist");});
+            listAlertMessage.add(Alert.builder().success().message("Doctor assigned successfully").build());
+        } catch (Exception e) {
+            listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
+        }
+        addUIAlertToSession(session, listAlertMessage);
+        response.put("alerts", listAlertMessage);
+        response.put("url", "/profile");
+        return ResponseEntity.ok(response);
+    }
+
 
 }

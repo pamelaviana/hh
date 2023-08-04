@@ -3,6 +3,7 @@ package com.pamela.hh.doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +47,9 @@ public class DoctorPatientMapperService {
 
     public Optional<Boolean> existsByDoctorId(Long id) {
         return doctorPatientMapperRepository.existsByDoctorId(id);
+    }
+
+    public Optional<ArrayList<DoctorPatientMapper>> getAllDoctorsByPatientId(Long id) {
+        return doctorPatientMapperRepository.findAllByPatientId(id);
     }
 }

@@ -72,6 +72,7 @@
                                         <table class="table my-0" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>ID</th>
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Role</th>
@@ -81,7 +82,8 @@
                                             </thead>
                                             <tbody>
                                                 <tr th:each="userTmp: ${users}">
-                                                    <td th:text="${userTmp.firstName + ' ' + userTmp.lastName}" style="max-width: 120px;">Emma Jones</td>
+                                                    <td th:text="${userTmp.id}" style="max-width: 120px;">1</td>
+                                                    <td th:text="${userTmp.getUsername}" style="max-width: 120px;">Emma Jones</td>
                                                     <td th:text="${userTmp.email}" style="max-width: 200px;">emma@email.com</td>
                                                     <td th:text="${userTmp.userRole}" style="max-width: 80px;">Patient</td>
                                                     <td th:text="${patientPolicyMap.get(userTmp.email) ?: 'None'}" style="max-width: 100px;">0000000001</td>
