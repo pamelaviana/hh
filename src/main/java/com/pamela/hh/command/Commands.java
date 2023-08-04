@@ -30,7 +30,7 @@ import java.util.List;
 @Configuration
 public class Commands {
 
-    private final boolean IGNORE_TEST_DATA = true;
+    private final boolean IGNORE_TEST_DATA = false;
 
     private final UserService userService;
     private final PatientService patientService;
