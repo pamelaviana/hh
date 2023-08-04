@@ -216,33 +216,31 @@ public class UserProfileController extends BaseController {
         List<Alert> listAlertMessage = new ArrayList<>();
         flagAllUIAlertsIfAny(model, session);
         try {
+
             Patient patient = patientService.getByUserId(userSession.getId())
                     .orElseThrow(() -> new IllegalStateException("You must be a patient to assign a doctor"));
-            Optional.ofNullable(userService.getByUserId(user.getId())).ifPresentOrElse(
-                    doctor -> {
-                        if (doctor.getUserRole().equals(UserRole.DOCTOR)) {
-                            doctorPatientMapperService.getAllDoctorsByPatientId(patient.getId()).ifPresentOrElse(
-                                dpm -> {
-                                    dpm.stream().findFirst().ifPresent(dp -> {
-                                        doctorPatientMapperService.deleteByDoctorId(dp.getDoctor().getId());
-                                        DoctorPatientMapper dpmNew = DoctorPatientMapper.builder()
-                                                .doctor(doctor)
-                                                .patient(patient)
-                                                .build();
-                                        doctorPatientMapperService.save(dpmNew);
-                                    });
-                                },
-                                () -> {
-                                    DoctorPatientMapper dpmNew = DoctorPatientMapper.builder()
-                                            .doctor(doctor)
-                                            .patient(patient)
-                                            .build();
-                                    doctorPatientMapperService.save(dpmNew);
-                                });
-                        }
-                    },
-                    () -> {throw new IllegalStateException("Doctor doesn't exist");});
-            listAlertMessage.add(Alert.builder().success().message("Doctor assigned successfully").build());
+
+            User registerDoctor = Optional.ofNullable(userService.getByUserId(user.getId()))
+                            .orElseThrow(() -> new IllegalStateException("Doctor doesn't exist"));
+
+            if (registerDoctor.getUserRole().equals(UserRole.DOCTOR)) {
+
+                List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperService
+                        .getAllDoctorsByPatientId(patient.getId()).orElse(new ArrayList<>());
+
+                for (DoctorPatientMapper dpm : doctorPatientMappers) {
+                    doctorPatientMapperService.deleteByDoctorId(dpm.getDoctor().getId());
+                }
+
+                DoctorPatientMapper dpmNew = DoctorPatientMapper.builder()
+                        .doctor(registerDoctor)
+                        .patient(patient)
+                        .build();
+                doctorPatientMapperService.save(dpmNew);
+                listAlertMessage.add(Alert.builder().success().message("Doctor assigned successfully").build());
+            } else {
+                listAlertMessage.add(Alert.builder().danger().message("Selected user must be a doctor").build());
+            }
         } catch (Exception e) {
             listAlertMessage.add(Alert.builder().danger().message(e.getMessage()).build());
         }
@@ -251,6 +249,5 @@ public class UserProfileController extends BaseController {
         response.put("url", "/profile");
         return ResponseEntity.ok(response);
     }
-
 
 }
