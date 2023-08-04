@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 import java.util.List;
 
-@Configuration
+//@Configuration
 public class Commands {
 
     private final UserService userService;
