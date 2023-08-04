@@ -2,6 +2,7 @@ package com.pamela.hh.user.profile;
 
 import com.pamela.hh.alert.ui.Alert;
 import com.pamela.hh.doctor.DoctorPatientMapper;
+import com.pamela.hh.doctor.DoctorPatientMapperNullObject;
 import com.pamela.hh.doctor.DoctorPatientMapperService;
 import com.pamela.hh.entity.BaseController;
 import com.pamela.hh.hospital.policy.PatientPolicy;
@@ -91,10 +92,11 @@ public class UserProfileController extends BaseController {
         List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperService
                 .getAllDoctorsByPatientId(user.getId()).orElse(new ArrayList<>());
 
-        doctorPatientMappers.stream().findFirst().ifPresent(dpm -> {
-            model.addAttribute("doctors", doctors);
-            model.addAttribute("assignedDoctor", dpm);
-        });
+        DoctorPatientMapper doctorPatientMapper = doctorPatientMappers.stream().findFirst()
+                        .orElse(new DoctorPatientMapperNullObject());
+
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("assignedDoctor", doctorPatientMapper);
     }
 
     private PatientPolicy getPatientPolicy(User user, List<Alert> listAlertMessage) {
