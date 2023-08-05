@@ -68,19 +68,33 @@ public class Commands {
 
             if (IGNORE_TEST_DATA) return;
 
-            PatientPolicy patientPolicy = PatientPolicy.builder()
+            PatientPolicy pamelaPolicy = PatientPolicy.builder()
                     .firstName("Pamela")
                     .lastName("Quintanilha")
                     .email("pamela@email.com")
                     .build();
-            patientPolicyService.save(patientPolicy);
+            patientPolicyService.save(pamelaPolicy);
 
-            PatientPolicy patientPolicy2 = PatientPolicy.builder()
+            PatientPolicy brianPolicy = PatientPolicy.builder()
                     .firstName("Brian")
                     .lastName("Smith")
                     .email("brain.smith@email.com")
                     .build();
-            patientPolicyService.save(patientPolicy2);
+            patientPolicyService.save(brianPolicy);
+
+            PatientPolicy victorPolicy = PatientPolicy.builder()
+                    .firstName("Victor")
+                    .lastName("Smith")
+                    .email("victor@email.com")
+                    .build();
+            patientPolicyService.save(victorPolicy);
+
+            PatientPolicy charlesPolicy = PatientPolicy.builder()
+                    .firstName("Charles")
+                    .lastName("Smith")
+                    .email("charles@hotmail.com")
+                    .build();
+            patientPolicyService.save(charlesPolicy);
 
             User pamela = User.builder()
                     .id(1L)

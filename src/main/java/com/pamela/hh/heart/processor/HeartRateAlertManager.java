@@ -9,6 +9,7 @@ import com.pamela.hh.heart.healthparameters.HealthParamRangeRepository;
 import com.pamela.hh.heart.healthparameters.factory.HealthParamRangeFactory;
 import com.pamela.hh.patient.Patient;
 import com.pamela.hh.patient.PatientRepository;
+import com.pamela.hh.patient.PatientService;
 import com.pamela.hh.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.List;
 public class HeartRateAlertManager {
 
     private AlertHeartRateRepository alertHeartRateRepository;
-    private PatientRepository patientRepository;
+    private PatientService patientService;
     private HealthParamRangeRepository healthParamRangeRepository;
     private DoctorPatientMapperRepository doctorPatientMapperRepository;
 
@@ -30,7 +31,7 @@ public class HeartRateAlertManager {
         List<DoctorPatientMapper> doctorPatientMappers = doctorPatientMapperRepository
                 .findByPatientId(heartRate.getUserId());
 
-        Patient patient = patientRepository.findById(heartRate.getUserId())
+        Patient patient = patientService.getByUserId(heartRate.getUserId())
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         HealthParamRangeFactory healthParamRangeFactory = new HealthParamRangeFactory(healthParamRanges);
@@ -54,8 +55,8 @@ public class HeartRateAlertManager {
     }
 
     @Autowired
-    public void setPatientRepository(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
     }
 
     @Autowired
